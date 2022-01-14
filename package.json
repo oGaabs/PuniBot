@@ -1,0 +1,19 @@
+{
+  "name": "punibot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Gabriel",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^13.5.1",
+    "dotenv": "^11.0.0",
+    "express": "^4.17.2",
+    "node-fetch": "^2.6.1",
+    "nodemon": "^2.0.15"
+  }
+}
