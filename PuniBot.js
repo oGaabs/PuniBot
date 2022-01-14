@@ -8,31 +8,6 @@ module.exports = class PuniBot extends Client{
         this.commands = new Collection()
     }
 
-    get guild(){
-        return this._guild;
-    }
-    get canais(){
-        return this._canais;
-    }
-    get footer(){
-        return this._footer;
-    }
-    get prefix(){
-        return this._prefix;
-    }
-    set guild(g){
-        this._guild = g;
-    }
-    set canais(c){
-        this._canais = c;
-    }
-    set footer(f){
-        this._footer = f;
-    }
-    set prefix(p){
-        this._prefix = p;
-    }
-
     initCommands(path) {
         Fs.readdirSync(path).forEach(file =>{
             try{

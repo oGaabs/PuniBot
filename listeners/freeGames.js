@@ -1,17 +1,10 @@
 const {MessageEmbed} = require('discord.js')
 
-module.exports = async function memberCount(client) {
+module.exports = async function freeGamesReddit(client) {
     const nodeFetch = require('node-fetch')
     const canais = client.canais
     const freeGameChannel = canais.get('926542213012389959')
     const sentGames = []
-
-    client.on('messageCreate', function (msg) {
-        // Send free games when users types sendFreeGames, won't send duplicates
-        if (msg.content.toLowerCase() === 'fgsend') {
-            sendGames(msg.channel.id)
-        }
-    })
 
     // Call fetchGames every 1 hour (3600000 milliseconds)
     setInterval(function () {
@@ -64,8 +57,6 @@ module.exports = async function memberCount(client) {
                     let title = postIndex.data.title
                     if (title.length > 256)
                         title = title.substring(0, 256)
-                    if (clientChannel.messages.includes(title))
-                        continue
                     const shortReddit = 'https://reddit.com/'+`https://www.reddit.com${postIndex.data.permalink}`.replace('https://www.reddit.com/r/GameDeals/comments/','').split('/')[0]
                     const message =  await clientChannel.send('**'+title +'**'+ '\n'+
                                             postIndex.data.url+ '\n')
@@ -94,4 +85,6 @@ module.exports = async function memberCount(client) {
             }
         }
     }
+
+    this.sendGames = sendGames()
 }

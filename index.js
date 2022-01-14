@@ -9,17 +9,17 @@ app.get('/', async (_req, res) => {
 })
 app.listen(porta, () => console.log('> Servidor NodeJS funcionando na porta ' + porta + '.'))
 
-const {Intents} = require('discord.js')
+const { Intents } = require('discord.js')
 const PuniBot = require('./PuniBot')
 const intents = new Intents(32767);
 const client = new PuniBot({ intents: intents });
 
-client.once('ready', async () =>{
+client.once('ready', async () => {
     console.log(process.memoryUsage().rss / 512 / 512)
+    client.prefix = process.env.PREFIX
     client.guild = client.guilds.cache.get('926539282733203546')
     client.canais = client.channels.cache
-    client.footer = new Object({ text: "🧁・Caravana do Pudim", iconURL: client.guild.iconURL()})
-    client.prefix = process.env.PREFIX
+    client.footer = { text: client.guild.name, iconURL: client.guild.iconURL() }
     client.initListeners('./listeners')
     client.initCommands('./commands')
 })
