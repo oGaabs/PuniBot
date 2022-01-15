@@ -1,8 +1,8 @@
-require("dotenv").config();
+require("dotenv").config()
 const express = require('express')
 
 const app = express()
-const porta = process.env.PORT
+const porta = process.env.PORT || 3000
 
 app.get('/', async (_req, res) => {
     res.send('<h1> Servidor de internet NodeJS funcionando.</h1>')
@@ -11,8 +11,7 @@ app.listen(porta, () => console.log('> Servidor NodeJS funcionando na porta ' + 
 
 const { Intents } = require('discord.js')
 const PuniBot = require('./PuniBot')
-const intents = new Intents(32767);
-const client = new PuniBot({ intents: intents });
+const client = new PuniBot({ intents: new Intents(32767) })
 
 client.once('ready', async () => {
     console.log(process.memoryUsage().rss / 512 / 512)
@@ -29,5 +28,5 @@ client.login(process.env.TOKEN)
     console.log(`Logado como ${client.user.tag}.`)
 })
 .catch(err => {
-    console.log(`Falha ao iniciar o bot :::: ${err}`)
+    console.log(`Falha ao iniciar o bot : ${err}`)
 })

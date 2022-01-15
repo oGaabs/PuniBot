@@ -1,15 +1,16 @@
 const Fs = require('fs')
 
 module.exports = async function onMessage(client) {
-    prefix = client.prefix
+    const prefix = client.prefix
+    const commands = client.commands
     client.on('messageCreate', async message => {
-        if(!message.content.toLowerCase().startsWith(prefix) || message.author.bot) return;
+        if (message.mentions.has(client.user)) commands.get('help').execute(message, '', client)
+        if(!message.content.toLowerCase().startsWith(prefix) || message.author.bot) return
         const args = message.content.slice(prefix.length).split(/ +/);
-        args.shift()
-        const command = args[0].toLowerCase();
-        if ((initCommands('commands', command))) {
-            client.commands.get(command).execute(message, args, client)
-        }
+        args.shift() 
+        const command = args[0].toLowerCase()
+        if ((initCommands('commands', command)))
+            commands.get(command).execute(message, args, client)
     })
 
     function initCommands(path, command){

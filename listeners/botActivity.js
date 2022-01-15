@@ -6,13 +6,12 @@ module.exports = async function botActivity (client){
         user.setStatus(stats[Math.floor(Math.random() * stats.length)])
     }, 20000)
 
-    const twitch = 'https://www.twitch.tv/punishw__/'
     const status = [
         { name: '🎥 Cineminha!', type: 'STREAMING', url: 'https://www.netflix.com/watch/81073022?trackId=14170033&tctx=1%2C0%2Cbb356764-ae2a-42ea-afac-69e403b2ac9e-42496442%2C09551ab6-8494-4e9b-bdca-5f41cf065a47_24951814X9XX1641901381014%2C09551ab6-8494-4e9b-bdca-5f41cf065a47_ROOT%2C%2C%2C' },
-        { name: '🍮 Como fazer um pudim?', type: 'STREAMING', url: twitch },
-        { name: `${guild.memberCount} membros 🥳`, type: 'STREAMING', url: twitch  },
-        { name: `${user.tag} ✔️`, type: 'STREAMING', url: twitch  },
-        { name: `${client.prefix} (comando)`, type: 'PLAYING' },
+        { name: '🍮 Como fazer um pudim?', type: 'PLAYING'},
+        { name: `${guild.memberCount} membros 🥳`, type: 'PLAYING' },
+        { name: `${user.tag} ✔️`, type: 'PLAYING'  },
+        { name: `${client.prefix} help`, type: 'PLAYING' },
         { name: 'Sem minha crush 💔', type: 'PLAYING' },
         { name: '🏆 Anda perdido ? me mencione!', type: 'PLAYING' },
         { name: '🔑 Entre em contato para reportar qualquer bug.', type: 'PLAYING' },

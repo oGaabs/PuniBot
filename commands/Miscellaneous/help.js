@@ -19,7 +19,7 @@ module.exports ={
             commandsSize++
         })
         const helpEmbed = new MessageEmbed()
-            .setTitle('🟪 | A AJUDA CHEGOU')
+            .setTitle('🟣 | A AJUDA CHEGOU')
             .setColor('#9B59B6')
             .setDescription('Sou um simples bot de moderação que fabrica Pudims!')
             .setTimestamp()
