@@ -15,7 +15,6 @@ module.exports = async function botActivity (client){
         { name: 'Sem minha crush 💔', type: 'PLAYING' },
         { name: '🏆 Anda perdido ? me mencione!', type: 'PLAYING' },
         { name: '🔑 Entre em contato para reportar qualquer bug.', type: 'PLAYING' },
-        { name: '<:milkyway_ej:930178378579988500> Pudim espacial!', type: 'PLAYING' },
         { name: '🍮 Pudim na lua?', type: 'PLAYING' },
         { name: '🍮 Desfrute de um belo pudim', type: 'PLAYING' },
         { name: '🍮 Pudim Pudim Pudim', type: 'PLAYING' },

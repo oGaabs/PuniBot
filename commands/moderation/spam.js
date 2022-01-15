@@ -18,7 +18,13 @@ module.exports ={
         if (!message.member.permissions.has('ADMINISTRATOR'))
             return message.channel.send({ embeds: [permissionErrorEmbed] })
         let spamCount = 0
-        while (spamCount != args[1]){
+        while (spamCount < args[1]){
+            await message.channel.messages.fetch({ limit: spamCount+1 }).then(messages => {
+                messages.map((msg) => {
+                    if (msg.content === 'stop' && msg.author == message.author)
+                        spamCount = args[1]
+                })
+            })
             await message.channel.send((Math.random() + 1).toString(36).substring(7))
             spamCount++
         }
