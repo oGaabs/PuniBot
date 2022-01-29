@@ -33,7 +33,8 @@ client.once('ready', async () => {
             owner.send('Estou online 🤨👍').then( message => {
                 message.reply('**Calculando...**').then(m=>{
                     const ping = m.createdTimestamp - message.createdTimestamp
-                    m.edit(`Bot Latency: ${ping} ms, API Latency: ${Math.round(client.ws.ping)} ms`).then(m => {
+                    m.delete()
+                    owner.send(`Bot Latency: ${ping} ms, API Latency: ${Math.round(client.ws.ping)} ms`).then(m => {
                         console.log(m.content + '\n')
                     })
                 })
