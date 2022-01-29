@@ -34,7 +34,7 @@ module.exports ={
                 },
                 {
                     name: 'Convide mais pessoas ao servidor!',
-                    value: `[Invite Link](https://discord.com/invite/TRTutqsF)`
+                    value: `[Invite Link](https://discord.gg/4YCgPhSnmM)`
                 }
             )
         const pudimEmbed = new MessageEmbed()
