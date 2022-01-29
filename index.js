@@ -14,7 +14,7 @@ const PuniBot = require('./PuniBot')
 const client = new PuniBot({ intents: new Intents(32767) })
 
 client.once('ready', async () => {
-    console.log(process.memoryUsage().rss / 512 / 512)
+    console.log(`Memory: ${Math.round(process.memoryUsage().rss / 1024 / 1024 * 100) / 100 } MB`)
     client.prefix = process.env.PREFIX
     client.guild = client.guilds.cache.get('926539282733203546')
     client.canais = client.channels.cache
