@@ -8,7 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Gabriel",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "discord.js": "^13.5.1",
     "dotenv": "^11.0.0",
