@@ -21,6 +21,18 @@ client.once('ready', async () => {
     client.footer = { text: client.guild.name, iconURL: client.guild.iconURL() }
     client.initListeners('./listeners')
     client.initCommands('./commands')
+    client.users.fetch('407734609967841299', false).then((owner) => {
+        owner.createDM().then(dmChannel => {
+            dmChannel.messages.fetch({ limit: 100 })
+            .then((messages) => {
+                messages = messages.filter( m => { return m.author.id === client.user.id })
+                messages.forEach(message => {
+                    message.delete()
+                })
+            })
+            owner.send('Estou online 🤨👍')
+        })
+    })
 })
 
 client.login(process.env.TOKEN)
