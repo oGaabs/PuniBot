@@ -5,12 +5,18 @@ module.exports ={
     name: 'gif',
     description: "Mande um GIF!",
     args: '(Tema)',
-    async execute(message, args, _client) {
+    async execute(message, args, client) {
         const searchTerm = !args[1] ? 'pudim' : args[1]
-        const url = `https://g.tenor.com/v1/search?q=${searchTerm}&key=${process.env.TENORKEY}&ContentFilter=high`
-        const response = await nodeFetch(url)
+        const response = await nodeFetch(`https://g.tenor.com/v1/search?q=${searchTerm}&key=${process.env.TENORKEY}&ContentFilter=high`)
         const json = await response.json()
-        const gifIndex = Math.floor(Math.random() * json.results.length)
-        message.reply(json.results[gifIndex].url)
+        const gifPost = json.results[Math.floor(Math.random() * json.results.length)]
+
+        const gifEmbed = new MessageEmbed()
+            .setTitle('Aqui está seu gif!')
+            .setImage(gifPost.media[0].gif.url)
+            .setURL(gifPost.url)
+            .setFooter(client.footer)
+            .setTimestamp()
+        message.reply({embeds: [gifEmbed]})
     }
 }
