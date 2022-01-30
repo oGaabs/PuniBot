@@ -5,7 +5,7 @@ module.exports ={
     args: '(qtdMensagens)',
     async execute(message, args, client) {
         if (!args[1]) return message.reply('Insira a quantidade de mensagens que você quer limpar!')
-        if (!args[1] === 'all' && isNaN(args[1])) return message.reply('Insira apenas números!')
+        if (!args[1].toLowerCase() === 'all' && isNaN(args[1])) return message.reply('Insira apenas números!')
         if (args[1] >= 100 || args[1] < 1) return message.reply('So é possível deletar de 1 a 99 mensagens!')
 
         const permissionErrorEmbed = new MessageEmbed()
@@ -18,7 +18,7 @@ module.exports ={
         if (!message.member.permissions.has('MANAGE_MESSAGES'))
             return message.channel.send({ embeds: [permissionErrorEmbed] })
         const author = message.author
-        if (args[1] === 'all') {
+        if (args[1].toLowerCase() === 'all') {
             let countMsg = 0
             while (true) {
                 const fetch = await message.channel.messages.fetch({limit: 99})
