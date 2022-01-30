@@ -3,8 +3,8 @@ const { MessageEmbed } = require('discord.js')
 module.exports ={
     name: 'help',
     description: "Show commands!",
-    async execute(message, _args, client) {
-        const commands = client.commands
+    execute: async (message, _args, client) => {
+        const commands = JSON.parse(JSON.stringify(client.commands))
         let commandsSize = 0
         commands.forEach(cmd => {
             cmd.name  = '!p ' + cmd.name
