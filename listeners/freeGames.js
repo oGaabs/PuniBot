@@ -1,7 +1,7 @@
+const nodeFetch = require('node-fetch')
+
 module.exports = async function freeGamesReddit(client) {
-    const nodeFetch = require('node-fetch')
-    const canais = client.canais
-    const freeGameChannel = canais.get('926542213012389959')
+    const freeGameChannel = client.canais.get('937164018282557470')
     const sentGames = []
 
     // Call fetchGames every 1 hour (3600000 milliseconds)
@@ -34,11 +34,11 @@ module.exports = async function freeGamesReddit(client) {
         }
     }
 
-    const checkPost = (postIndex) =>{
-        const postTitle = postIndex.title.toLowerCase()
+    const checkPost = (postTitle) =>{
+        postTitle = postTitle.toLowerCase()
         if (!(postTitle.includes('free') || postTitle.includes('100%')))
             return false
-        if (!(postTitle.includes('steam')|| postTitle.includes('epic games')))
+        if (!(postTitle.includes('[steam]')|| postTitle.includes('[epic games]')))
             return false
         if (postTitle.includes('nsfw') || postTitle.includes('18'))
             return false
@@ -47,35 +47,76 @@ module.exports = async function freeGamesReddit(client) {
     }
 
     const getCurrentGames = async (post) => {
-        const clientChannel = freeGameChannel
         post = post.data.children
         for (let i = 0; i < 50; i++) {
             const postIndex = post[i].data
             const postTitle = postIndex.title
-            if (checkPost(postIndex)){
-                if (postIndex.ups > 10 && postIndex.thumbnail !== 'spoiler') {
-                    const reddit = 'https://reddit.com/'+`${postIndex.permalink}`.replace('/r/GameDeals/comments/','').split('/')[0]
-                    if (sentGames.indexOf(reddit) > -1) continue
-                    const title = postTitle.length < 257 ? postTitle: postTitle.substring(0, 256)
-                    const freeGameUrl = postIndex.url
-                    const messages = await clientChannel.messages.fetch({limit: 99})
-                    let find = false
-                    messages.map((msg) => {
-                        if ((msg.content === 'Reddit link:\n'+reddit) || msg.content === '**'+title +'**\n'+freeGameUrl)
-                            find = true
-                        return msg
-                    })
-                    sentGames.push(reddit)
-                    if (find) continue
-                    clientChannel.send('----------------------------{ **FREE GAME** }----------------------------')
-                    const gameMsg = await clientChannel.send('**'+title +'**\n'
-                                        +freeGameUrl)
-                    const redditMsg = await clientChannel.send('Reddit link:\n'+reddit)
-                    if (await gameMsg.embeds)
-                        redditMsg.suppressEmbeds(true)
+            if (!checkPost(postTitle)) continue
+            if (postIndex.ups <= 10 || postIndex.thumbnail === 'spoiler') continue
+
+            const reddit = 'https://reddit.com/'+`${postIndex.permalink}`.replace('/r/GameDeals/comments/','').split('/')[0]
+            if (sentGames.indexOf(reddit) > -1) continue
+            const title = postTitle.length < 257 ? postTitle: postTitle.substring(0, 256)
+            const freeGameUrl = postIndex.url
+            const messages = await freeGameChannel.messages.fetch({limit: 99})
+            let find = false
+            messages.map((msg) => {
+                if ((msg.content === 'Reddit link:\n'+reddit) || msg.content === '**'+title +'**\n'+freeGameUrl)
+                    find = true
+                return msg
+            })
+            sentGames.push(reddit)
+            if (find) continue
+            freeGameChannel.send('----------------------------{ **FREE GAME** }----------------------------')
+            const gameMsg = await freeGameChannel.send('**'+title +'**\n'
+                                +freeGameUrl)
+            const redditMsg = await freeGameChannel.send('Reddit link:\n'+reddit)
+            if (await gameMsg.embeds)
+                redditMsg.suppressEmbeds(true)
+        }
+        await searchMessages()
+    }
+
+    let idArray = []
+    let msgArray = []
+
+    const searchMessages = async () => {
+        freeGameChannel.messages.fetch().then(messages => {
+            try {
+                messages.map((message) => {
+                    if (message.author.id === client.user.id ) {
+                        if (idArray.indexOf(message.id) === -1) {
+                            idArray.push(message.id)
+                            msgArray.push(message.content)
+                        }
+                    }
+                    return message
+                })
+            }
+            catch (error) {
+                console.log(error)
+            }
+            sentGames.forEach(reddit =>{
+                let index = msgArray.indexOf('Reddit link:\n'+reddit)
+                while (index != -1) {
+                    msgArray.splice(index,3)
+                    idArray.splice(index,3)
+                    index = msgArray.indexOf('Reddit link:\n'+reddit)
+                }
+            })
+            idArray = [...new Set(idArray)]
+            const deleteOld = async () =>{
+                while (idArray.length != 0) {
+                    const id = idArray.shift()
+                    if (!id) continue
+                    const message = await freeGameChannel.messages.fetch(id)
+                    if (!message) continue
+                    console.log(idArray)
+                    await message.delete()
                 }
             }
-        }
+            deleteOld()
+        })
     }
 
     module.exports = {sendGames: sendGames}
