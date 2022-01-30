@@ -3,7 +3,7 @@ const { MessageEmbed } = require('discord.js')
 module.exports ={
     name: 'invite',
     description: "Generate invite",
-    async execute(message, _args, client) {
+    execute: async (message, _args, client) => {
         const inviteChannel = client.canais.get('926540915819028521')
         const invite = await inviteChannel.createInvite({unique: true, reason: 'Requisitado pelo' + message.author})
         const inviteEmbed = new MessageEmbed()

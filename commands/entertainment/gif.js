@@ -5,8 +5,8 @@ module.exports ={
     name: 'gif',
     description: "Mande um GIF!",
     args: '(Tema)',
-    async execute(message, args, client) {
-        const searchTerm = !args[1] ? 'pudim' : args[1]
+    execute: async (message, args, client) =>{
+        const searchTerm = args[1] || 'pudim'
         const response = await nodeFetch(`https://g.tenor.com/v1/search?q=${searchTerm}&key=${process.env.TENORKEY}&ContentFilter=high`)
         const json = await response.json()
         const gifPost = json.results[Math.floor(Math.random() * json.results.length)]

@@ -3,7 +3,7 @@ const { MessageEmbed } = require('discord.js')
 module.exports ={
     name: 'ping',
     description: "pong!",
-    async execute(message, _args, client) {
+    execute: async (message, _args, client) => {
         const pingingEmbed = new MessageEmbed()
             .setColor('#9B59B6')
             .setTitle(`**Calculando...**`)

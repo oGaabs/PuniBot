@@ -3,7 +3,7 @@ module.exports ={
     name: 'spam',
     description: "Spam de Mensagens!",
     args: '(qtdMensagens)',
-    async execute(message, args, client) {
+    execute: async (message, args, client) =>{
         if (!args[1]) return message.reply('Insira a quantidade de mensagens que você quer spammmr!')
         if (isNaN(args[1])) return message.reply('Insira apenas números!')
         if (args[1] > 30 || args[1] < 1) return message.reply('So é possível spammar de 1 a 30 mensagens!')
