@@ -11,7 +11,7 @@ app.listen(porta, () => console.log('> Servidor NodeJS funcionando na porta ' + 
 
 const { Intents } = require('discord.js')
 const PuniBot = require('./PuniBot')
-let client = new PuniBot({ intents: new Intents(32767) })
+const client = new PuniBot({ intents: new Intents(32767) })
 
 client.once('ready', async () => {
     client.prefix = process.env.PREFIX.toLowerCase()
