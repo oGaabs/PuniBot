@@ -111,7 +111,6 @@ module.exports = async function freeGamesReddit(client) {
                     if (!id) continue
                     const message = await freeGameChannel.messages.fetch(id)
                     if (!message) continue
-                    console.log(idArray)
                     await message.delete()
                 }
             }
