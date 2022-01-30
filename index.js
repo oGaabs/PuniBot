@@ -11,16 +11,16 @@ app.listen(porta, () => console.log('> Servidor NodeJS funcionando na porta ' + 
 
 const { Intents } = require('discord.js')
 const PuniBot = require('./PuniBot')
-const client = new PuniBot({ intents: new Intents(32767) })
+let client = new PuniBot({ intents: new Intents(32767) })
 
 client.once('ready', async () => {
-    console.log(`Memory: ${Math.round(process.memoryUsage().rss / 1024 / 1024 * 100) / 100 } MB`)
     client.prefix = process.env.PREFIX.toLowerCase()
     client.guild = client.guilds.cache.get('926539282733203546')
     client.canais = client.channels.cache
     client.footer = { text: client.guild.name, iconURL: client.guild.iconURL() }
     client.initListeners('./listeners')
     client.initCommands('./commands')
+    console.log(`Memory: ${Math.round(process.memoryUsage().rss / 1024 / 1024 * 100) / 100 } MB`)
     client.users.fetch('407734609967841299', false).then((owner) => {
         owner.createDM().then(dmChannel => {
             dmChannel.messages.fetch({ limit: 100 })
@@ -40,6 +40,16 @@ client.once('ready', async () => {
                 })
             })
         })
+    })
+})
+
+process.on('unhandledRejection', error => {
+    console.log('Erro : ', error)
+    console.log('\nLogando novamente...')
+    client.destroy()
+    client.login(process.env.TOKEN).then(() =>{
+        console.log(`\nLogado como ${client.user.tag}`+
+                    `\nMemory: ${Math.round(process.memoryUsage().rss / 1024 / 1024 * 100) / 100 } MB\n`)
     })
 })
 
