@@ -2,7 +2,7 @@ const { MessageEmbed } = require('discord.js')
 
 module.exports = async function guildMemberRemove(client) {
     const canais = client.canais
-    const welcomeChannel = canais.get('926540915819028521');
+    const welcomeChannel = canais.get('926540915819028521')
 
     client.on('guildMemberRemove', async member => {
         if (member.user.bot) return

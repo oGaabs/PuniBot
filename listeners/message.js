@@ -7,7 +7,7 @@ module.exports = async function onMessage(client) {
         if (message.author.bot) return
         if (message.mentions.has(client.user)) commands.get('help').execute(message, '', client)
         if(!message.content.toLowerCase().startsWith(prefix) || message.author.bot) return
-        const args = message.content.slice(prefix.length).split(/ +/);
+        const args = message.content.slice(prefix.length).split(/ +/)
         args.shift()
         const command = args[0].toLowerCase()
         if ((initCommands('commands', command)))

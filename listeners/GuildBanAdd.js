@@ -11,10 +11,10 @@ module.exports = async function onGuildBanAdd(client, _message) {
                 type: 'MEMBER_BAN_ADD'
             })
 
-            const banLog = fetchedLogs.entries.first();
-            if (!banLog) return logsChannel.send(`<a:a_Wumpus_Sad:924250380953583659> ${ban.user.tag} foi banido do ${ban.guild.name}, mas nenhum registro de auditoria foi encontrado.`);
+            const banLog = fetchedLogs.entries.first()
+            if (!banLog) return logsChannel.send(`<a:a_Wumpus_Sad:924250380953583659> ${ban.user.tag} foi banido do ${ban.guild.name}, mas nenhum registro de auditoria foi encontrado.`)
 
-            const { executor, target } = banLog;
+            const { executor, target } = banLog
             const banned = new MessageEmbed()
                 .setThumbnail(target.displayAvatarURL({ dynamic: true, size: 1024 }))
                 .setTitle('Ação | Ban')

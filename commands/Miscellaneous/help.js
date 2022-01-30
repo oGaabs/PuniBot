@@ -9,7 +9,7 @@ module.exports ={
         commands.forEach(cmd => {
             cmd.name  = '!p ' + cmd.name
             cmd.value = cmd.description
-            cmd.inline = true;
+            cmd.inline = true
             if(cmd.hasOwnProperty('args')){
                 cmd.name = cmd.name + ' ' + cmd.args
                 delete cmd.args
