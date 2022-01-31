@@ -15,7 +15,8 @@ The Discord.js is a powerful [Node.js](https://nodejs.org) module that allows yo
 
 ### Discord.js:
 
-- **Node.js 16.9.0 or newer is required.**
+* **Discord.js 13.x.x or newer is required.**
+* **Node.js 16.9.0 or newer is required.**
 
 ```sh-session
 npm install discord.js
@@ -25,7 +26,7 @@ npm install discord.js
 
 ### Node-fetch:
 
-- **Node-fetch 2.6.x is required.**
+* **Node-fetch 2.6.x is required.**
 
 ```sh-session
 npm install node-fetch@2.6.7
@@ -35,7 +36,7 @@ npm install node-fetch@2.6.7
 
 ### Dotenv:
 
-- **Using Dotenv 11.0.0**
+* **Using Dotenv 15.0.0**
 
 ```sh-session
 npm install dotenv --save
@@ -45,15 +46,13 @@ npm install dotenv --save
 
 ### Express:
 
-- **Using express 4.17.2**
+* **Using Express 4.17.2**
 
 ```sh-session
-npm i express
+npm install express
 ```
 
 ---
-
-
 
 ## Contributing
 
@@ -68,13 +67,13 @@ Feel free to send suggestions, provide tips or even rebuild the code.
 
 ## Authors
 
-* **Gabriel Santana Silva** - *Owner* - [GitHub](github)
+* **Gabriel Santana Silva** - *Owner* - [GitHub][github]
 
 ## License
 
-This project is licensed under the [MIT License](license).
+This project is licensed under the [MIT License][license].
 
-[<img alt="License Icon MIT" src="https://upload.wikimedia.org/wikipedia/commons/f/f8/License_icon-mit-88x31-2.svg" height="50" width="200"/>](license)
+[<img alt="License Icon MIT" src="https://upload.wikimedia.org/wikipedia/commons/f/f8/License_icon-mit-88x31-2.svg" height="50" width="200"/>][license]
 
 ---
 
