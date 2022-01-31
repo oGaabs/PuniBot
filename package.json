@@ -1,7 +1,7 @@
 {
   "name": "punibot",
   "version": "1.0.0",
-  "description": "",
+  "description": "A Simple Discord bot made with Discord.js and Node.js",
   "main": "index.js",
   "scripts": {
     "start": "nodemon index",
@@ -13,7 +13,19 @@
     "discord.js": "^13.5.1",
     "dotenv": "^11.0.0",
     "express": "^4.17.2",
-    "node-fetch": "^2.6.1",
+    "node-fetch": "^2.6.1"
+  },
+  "devDependencies": {
     "nodemon": "^2.0.15"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PuniGC/PuniBot.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url" : "https://github.com/PuniGC/PuniBot/issues",
+    "email" : "gabriel04.ok@gmail.com"
+  },
+  "homepage": "https://github.com/PuniGC/PuniBot#readme"
 }
