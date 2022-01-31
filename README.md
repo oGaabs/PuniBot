@@ -1,2 +1,85 @@
+[<img alt="Discord.js image" src="https://discord.js.org/static/logo.svg" width="546"/>][discordjs]
+
 # PuniBot
-A Simple Bot for Discord made with Discord.js and Node.js
+
+---
+
+A Simple Discord bot made with Discord.js and Node.js.
+
+The Discord.js is a powerful [Node.js](https://nodejs.org) module that allows you to easily interact with the
+[Discord API](https://discord.com/developers/docs/intro).
+
+---
+
+## Installation
+
+### Discord.js:
+
+- **Node.js 16.9.0 or newer is required.**
+
+```sh-session
+npm install discord.js
+```
+
+---
+
+### Node-fetch:
+
+- **Node-fetch 2.6.x is required.**
+
+```sh-session
+npm install node-fetch@2.6.7
+```
+
+---
+
+### Dotenv:
+
+- **Using Dotenv 11.0.0**
+
+```sh-session
+npm install dotenv --save
+```
+
+---
+
+### Express:
+
+- **Using express 4.17.2**
+
+```sh-session
+npm i express
+```
+
+---
+
+
+
+## Contributing
+
+Feel free to send suggestions, provide tips or even rebuild the code.
+
+#### Networks:
+
+[<img alt="GitHub followers" src="https://img.shields.io/github/followers/PuniGC?label=Follow&style=social" height="22" title="Follow me"/>][github]
+[<img alt="Mail to Gabriel" src="https://img.shields.io/badge/-Gmail-c14438?style=flat&logo=Gmail&logoColor=white" height="22" title="gabriel04.ok@gmail.com" />][email]
+[<img alt="Linkedin Profile" src="https://img.shields.io/badge/-LinkedIn-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/gabriel-santana-silva-1205461a3/" height="22" />][linkedin]
+[<img alt="Discord Profile" src="https://img.shields.io/badge/Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white&link=dsc.bio/punidc" height="22" />][discord]
+
+## Authors
+
+* **Gabriel Santana Silva** - *Owner* - [GitHub](github)
+
+## License
+
+This project is licensed under the [MIT License](license).
+
+[<img alt="License Icon MIT" src="https://upload.wikimedia.org/wikipedia/commons/f/f8/License_icon-mit-88x31-2.svg" height="50" width="200"/>](license)
+
+---
+
+[discordjs]: https://discord.js.org
+[github]: https://github.com/PuniGC
+[linkedin]: https://www.linkedin.com/in/gabriel-santana-silva-1205461a3/
+[email]: mailto:gabriel04.ok@gmail.com
+[discord]: https://discords.com/bio/p/punidc
