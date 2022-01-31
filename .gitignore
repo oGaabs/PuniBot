@@ -1,5 +1,23 @@
-/desktop.ini
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+
+# Packages node
 /node_modules
 /package-lock.json
+
+# Env
 /.env
-/.db
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Windows shortcuts
+*.lnk
+
+# Folder config file
+[Dd]esktop.ini
