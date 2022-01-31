@@ -82,3 +82,4 @@ This project is licensed under the [MIT License][license].
 [linkedin]: https://www.linkedin.com/in/gabriel-santana-silva-1205461a3/
 [email]: mailto:gabriel04.ok@gmail.com
 [discord]: https://discords.com/bio/p/punidc
+[license]: LICENSE
