@@ -1,7 +1,7 @@
-const {Client, Collection} = require('discord.js')
+const { Client, Collection } = require('discord.js')
 const Fs = require('fs')
 
-module.exports = class PuniBot extends Client{
+module.exports = class PuniBot extends Client {
     constructor(options = {}) {
         super(options)
 
@@ -9,36 +9,33 @@ module.exports = class PuniBot extends Client{
     }
 
     initCommands(path) {
-        Fs.readdirSync(path).forEach(file =>{
-            try{
-                let filePath = path + '/' + file
-                if (file.endsWith('.js')){
+        Fs.readdirSync(path).forEach(file => {
+            try {
+                const filePath = path + '/' + file
+                if (file.endsWith('.js')) {
                     const command = require(filePath)
                     const commandName = file.replace(/.js/g, '').toLowerCase()
                     return this.commands.set(commandName, command)
                 }
-                else if (Fs.lstatSync(filePath).isDirectory()){
+                if (Fs.lstatSync(filePath).isDirectory())
                     this.initCommands(filePath)
-                }
             }
-            catch (err){
+            catch (err) {
                 console.error(err)
             }
         })
     }
 
     initListeners(path) {
-        const files = Fs.readdirSync(path)
-        files.forEach(file => {
-            try{
-                let filePath = path + '/' + file
+        Fs.readdirSync(path).forEach(file => {
+            try {
+                const filePath = path + '/' + file
                 if (file.endsWith('.js')) {
-                    let Listener = require(filePath)
-                    Listener(this)
+                    const Listener = require(filePath)
+                    return Listener(this)
                 }
-                else if (Fs.lstatSync(filePath).isDirectory()) {
+                if (Fs.lstatSync(filePath).isDirectory())
                     this.initListeners(filePath)
-                }
             }
             catch (err) {
                 console.error(err)
