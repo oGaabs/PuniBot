@@ -6,17 +6,39 @@
 
 A Simple Discord bot made with Discord.js and Node.js.
 
-The Discord.js is a powerful [Node.js](https://nodejs.org) module that allows you to easily interact with the
+The Discord.js is a powerful [Node.js][nodejs] module that allows you to easily interact with the
 [Discord API](https://discord.com/developers/docs/intro).
 
 ---
 
 ## Installation
 
-### Discord.js:
+### Install dependencies automatically from package.json
+
+Install both "dependencies" and "devDependencies"
+
+```sh-session
+npm install
+```
+
+Only install "dependencies"
+
+```sh-session
+npm install --production
+```
+
+Only install "devDependencies"
+
+```sh-session
+npm install --dev
+```
+
+### Install dependencies individually
+
+#### Discord.js:
 
 * **Discord.js 13.x.x or newer is required.**
-* **Node.js 16.9.0 or newer is required.**
+* **[Node.js 16.9.0][nodejs] or newer is required.**
 
 ```sh-session
 npm install discord.js
@@ -24,7 +46,7 @@ npm install discord.js
 
 ---
 
-### Node-fetch:
+#### Node-fetch:
 
 * **Node-fetch 2.6.x is required.**
 
@@ -34,7 +56,7 @@ npm install node-fetch@2.6.7
 
 ---
 
-### Dotenv:
+#### Dotenv:
 
 * **Using Dotenv 15.0.0**
 
@@ -44,7 +66,7 @@ npm install dotenv --save
 
 ---
 
-### Express:
+#### Express:
 
 * **Using Express 4.17.2**
 
@@ -76,7 +98,7 @@ This project is licensed under the [MIT License][license].
 [<img alt="License Icon MIT" src="https://upload.wikimedia.org/wikipedia/commons/f/f8/License_icon-mit-88x31-2.svg" height="50" width="200"/>][license]
 
 ---
-
+[nodejs]: https://nodejs.org
 [discordjs]: https://discord.js.org
 [github]: https://github.com/PuniGC
 [linkedin]: https://www.linkedin.com/in/gabriel-santana-silva-1205461a3/
