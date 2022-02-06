@@ -6,6 +6,7 @@ module.exports = class PuniBot extends Client {
         super(options)
 
         this.commands = new Collection()
+        this.prefix = process.env.PREFIX.toLowerCase()
     }
 
     initCommands(path) {
