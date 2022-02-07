@@ -1,5 +1,5 @@
 const { MessageEmbed } = require('discord.js')
-const nodeFetch = require('node-fetch')
+const gifSearch = require('../../utils/gifSearch')
 
 module.exports ={
     name: 'gif',
@@ -7,14 +7,12 @@ module.exports ={
     args: '(Tema)',
     execute: async (message, args, client) =>{
         const searchTerm = args[1] || 'pudim'
-        const response = await nodeFetch(`https://g.tenor.com/v1/search?q=${searchTerm}&key=${process.env.TENORKEY}&ContentFilter=high`)
-        const json = await response.json()
-        const gifPost = json.results[Math.floor(Math.random() * json.results.length)]
+        const gif = gifSearch.getGif(searchTerm)
 
         const gifEmbed = new MessageEmbed()
             .setTitle('Aqui está seu gif!')
-            .setImage(gifPost.media[0].gif.url)
-            .setURL(gifPost.url)
+            .setImage(gif.image)
+            .setURL(gif.url)
             .setFooter(client.footer)
             .setTimestamp()
         message.reply({embeds: [gifEmbed]})
