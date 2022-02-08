@@ -12,7 +12,7 @@ module.exports = async function freeGamesReddit(client) {
             sentGames.splice(0, sentGames.length - 25000) // remove quarter of sent games list
     }, 60000)
 
-    const sendGames = async ()=>{
+    const sendGames = async () => {
         const posts = await fetchPosts()
         if (posts !== 'invalid' && posts !== null)
             getCurrentGames(posts)
@@ -20,7 +20,7 @@ module.exports = async function freeGamesReddit(client) {
 
     // Fetch posts from Reddit using node-fetch and return the body
     const fetchPosts = async () => {
-        try{
+        try {
             const res = await nodeFetch('https://reddit.com/r/gamedeals/new.json?sort=new&t=week&limit=100')
             const body = await res.json()
             if (!body.data)
@@ -29,16 +29,16 @@ module.exports = async function freeGamesReddit(client) {
                 return 'invalid'
             return body
         }
-        catch (err){
+        catch (err) {
             console.log(err)
         }
     }
 
-    const checkPost = (postTitle) =>{
+    const checkPost = (postTitle) => {
         postTitle = postTitle.toLowerCase()
         if (!(postTitle.includes('free') || postTitle.includes('100%')))
             return false
-        if (!(postTitle.includes('[steam]')|| postTitle.includes('[epic games]')))
+        if (!(postTitle.includes('[steam]') || postTitle.includes('[epic games]')))
             return false
         if (postTitle.includes('nsfw') || postTitle.includes('18'))
             return false
@@ -54,23 +54,23 @@ module.exports = async function freeGamesReddit(client) {
             if (!checkPost(postTitle)) continue
             if (postIndex.ups <= 10 || postIndex.thumbnail === 'spoiler') continue
 
-            const reddit = 'https://reddit.com/'+`${postIndex.permalink}`.replace('/r/GameDeals/comments/','').split('/')[0]
+            const reddit = 'https://reddit.com/' + `${postIndex.permalink}`.replace('/r/GameDeals/comments/', '').split('/')[0]
             if (sentGames.indexOf(reddit) > -1) continue
-            const title = postTitle.length < 257 ? postTitle: postTitle.substring(0, 256)
+            const title = postTitle.length < 257 ? postTitle : postTitle.substring(0, 256)
             const freeGameUrl = postIndex.url
-            const messages = await freeGameChannel.messages.fetch({limit: 99})
+            const messages = await freeGameChannel.messages.fetch({ limit: 99 })
             let find = false
             messages.map((msg) => {
-                if ((msg.content === 'Reddit link:\n'+reddit) || msg.content === '**'+title +'**\n'+freeGameUrl)
+                if ((msg.content === 'Reddit link:\n' + reddit) || msg.content === '**' + title + '**\n' + freeGameUrl)
                     find = true
                 return msg
             })
             sentGames.push(reddit)
             if (find) continue
             freeGameChannel.send('----------------------------{ **FREE GAME** }----------------------------')
-            const gameMsg = await freeGameChannel.send('**'+title +'**\n'
-                                +freeGameUrl)
-            const redditMsg = await freeGameChannel.send('Reddit link:\n'+reddit)
+            const gameMsg = await freeGameChannel.send('**' + title + '**\n'
+                + freeGameUrl)
+            const redditMsg = await freeGameChannel.send('Reddit link:\n' + reddit)
             if (await gameMsg.embeds)
                 redditMsg.suppressEmbeds(true)
         }
@@ -84,7 +84,7 @@ module.exports = async function freeGamesReddit(client) {
         freeGameChannel.messages.fetch().then(messages => {
             try {
                 messages.map((message) => {
-                    if (message.author.id === client.user.id ) {
+                    if (message.author.id === client.user.id) {
                         if (idArray.indexOf(message.id) === -1) {
                             idArray.push(message.id)
                             msgArray.push(message.content)
@@ -96,16 +96,16 @@ module.exports = async function freeGamesReddit(client) {
             catch (error) {
                 console.log(error)
             }
-            sentGames.forEach(reddit =>{
-                let index = msgArray.indexOf('Reddit link:\n'+reddit)
+            sentGames.forEach(reddit => {
+                let index = msgArray.indexOf('Reddit link:\n' + reddit)
                 while (index != -1) {
-                    msgArray.splice(index,3)
-                    idArray.splice(index,3)
-                    index = msgArray.indexOf('Reddit link:\n'+reddit)
+                    msgArray.splice(index, 3)
+                    idArray.splice(index, 3)
+                    index = msgArray.indexOf('Reddit link:\n' + reddit)
                 }
             })
             idArray = [...new Set(idArray)]
-            const deleteOld = async () =>{
+            const deleteOld = async () => {
                 while (idArray.length != 0) {
                     const id = idArray.shift()
                     if (!id) continue
@@ -118,6 +118,6 @@ module.exports = async function freeGamesReddit(client) {
         })
     }
 
-    module.exports = {sendGames: sendGames}
+    module.exports = { sendGames: sendGames }
 }
 

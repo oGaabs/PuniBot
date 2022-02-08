@@ -1,11 +1,11 @@
 const { MessageEmbed } = require('discord.js')
 const { gifSearch } = require('../../utils')
 
-module.exports ={
+module.exports = {
     name: 'gif',
     description: "Mande um GIF!",
     args: '(Tema)',
-    execute: async (message, args, client) =>{
+    execute: async (message, args, client) => {
         const searchTerm = args[1] || 'pudim'
         const gif = gifSearch.getGif(searchTerm)
 
@@ -15,6 +15,6 @@ module.exports ={
             .setURL(gif.url)
             .setFooter(client.getFooter(message))
             .setTimestamp()
-        message.reply({embeds: [gifEmbed]})
+        message.reply({ embeds: [gifEmbed] })
     }
 }

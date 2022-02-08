@@ -1,16 +1,16 @@
 const { MessageEmbed } = require('discord.js')
 
-module.exports ={
+module.exports = {
     name: 'help',
     description: "Show commands!",
     execute: async (message, _args, client) => {
         const commands = JSON.parse(JSON.stringify(client.commands))
         let commandsSize = 0
         commands.forEach(cmd => {
-            cmd.name  = '!p ' + cmd.name
+            cmd.name = '!p ' + cmd.name
             cmd.value = cmd.description
             cmd.inline = true
-            if(cmd.hasOwnProperty('args')){
+            if (cmd.hasOwnProperty('args')) {
                 cmd.name = cmd.name + ' ' + cmd.args
                 delete cmd.args
             }
@@ -20,10 +20,8 @@ module.exports ={
         })
         const helpEmbed = new MessageEmbed()
             .setTitle('🟣 | A AJUDA CHEGOU')
-            .setColor('#9B59B6')
+            .setColor(client.getColor('default'))
             .setDescription('Sou um simples bot de moderação que fabrica Pudims!')
-            .setTimestamp()
-            .setFooter(client.footer)
             .addFields(
                 commands.map((nome) => {
                     return nome
@@ -37,11 +35,14 @@ module.exports ={
                     value: `[Invite Link](https://discord.gg/4YCgPhSnmM)`
                 }
             )
+            .setFooter(client.getFooter(message))
+            .setTimestamp()
+
         const pudimEmbed = new MessageEmbed()
             .setTitle('🍮| PUDIM')
             .setThumbnail('https://revistamenu.com.br/wp-content/uploads/2020/05/diadopudim-1280x720.jpg')
+            .setFooter(client.getFooter(message))
             .setTimestamp()
-            .setFooter(client.footer)
-        message.channel.send({embeds: [helpEmbed,pudimEmbed]})
+        message.channel.send({ embeds: [helpEmbed, pudimEmbed] })
     }
 }

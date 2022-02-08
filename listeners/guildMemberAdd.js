@@ -6,31 +6,33 @@ module.exports = async function guildMemberAdd(client) {
     const generalChannel = canais.get('926546664783773847')
 
     client.on('guildMemberAdd', async member => {
-        if (member.user.bot){
+        if (member.user.bot) {
             const botRole = member.guild.roles.cache.get('926567305155055717')
             return member.roles.add(botRole)
         }
         let memberImg = member.user.displayAvatarURL()
         if (!memberImg || member.user.avatar === null)
-            memberImg ='https://cdn.discordapp.com/embed/avatars/0.png?size=256'
+            memberImg = 'https://cdn.discordapp.com/embed/avatars/0.png?size=256'
+        const color = client.getColor('default')
+        const footer = client.getFooter(message)
         const welcomeEmbed = new MessageEmbed()
             .setTitle("🌌 | Olá *Viajante*")
-            .setColor('#9B59B6')
-            .addField("⁣",`<@!${member.id}> **Sabemos que a estrada a frente é longa e perigosa, por isso sua presença é imprescindível em nossa jornada!**`, true)
+            .setColor(color)
+            .addField("⁣", `<@!${member.id}> **Sabemos que a estrada a frente é longa e perigosa, por isso sua presença é imprescindível em nossa jornada!**`, true)
             .setDescription('Curta essa noite estrelada conosco, encontre seu cantinho e aproveite a viagem!  😉')
             .setThumbnail(memberImg)
+            .setFooter(footer)
             .setTimestamp()
-            .setFooter(client.footer)
         const welcomeEmbedSimple = new MessageEmbed()
             .setTitle('Bem-vindo à Caravana do Pudim')
-            .setColor('#9B59B6')
-            .addField('Novo membro',[`<@${member.id}>`,'Sua jornada começa aqui! <:milkyway_ej:930178378579988500>'].join('\n'), false)
-            .setFooter(client.footer)
-        welcomeChannel.send({ embeds: [welcomeEmbed]})
-        generalChannel.send({ embeds: [welcomeEmbedSimple]})
+            .setColor(color)
+            .addField('Novo membro', [`<@${member.id}>`, 'Sua jornada começa aqui! <:milkyway_ej:930178378579988500>'].join('\n'), false)
+            .setFooter(footer)
+        welcomeChannel.send({ embeds: [welcomeEmbed] })
+        generalChannel.send({ embeds: [welcomeEmbedSimple] })
 
         const separatorRole = member.guild.roles.cache.get('926709141014196265')
-        const welcomeRole =   member.guild.roles.cache.get('930038268173643808')
+        const welcomeRole = member.guild.roles.cache.get('930038268173643808')
 
         member.roles.add(separatorRole)
         member.roles.add(welcomeRole)

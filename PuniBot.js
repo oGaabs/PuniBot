@@ -1,5 +1,7 @@
 const { Client, Collection } = require('discord.js')
+const { colors } = require('./utils')
 const Fs = require('fs')
+
 
 module.exports = class PuniBot extends Client {
     constructor(options = {}) {
@@ -7,6 +9,15 @@ module.exports = class PuniBot extends Client {
 
         this.commands = new Collection()
         this.prefix = process.env.PREFIX.toLowerCase()
+    }
+
+    getColor(color) {
+        const colorsJSON = JSON.parse(JSON.stringify(colors))
+        return colorsJSON.hasOwnProperty(color) ? colorsJSON[color] : null
+    }
+
+    getFooter(message) {
+        return message ? { text: message.guild.name, iconURL: message.guild.iconURL() } : null
     }
 
     initCommands(path) {

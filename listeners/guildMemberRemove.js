@@ -1,4 +1,5 @@
 const { MessageEmbed } = require('discord.js')
+const message = require('./message')
 
 module.exports = async function guildMemberRemove(client) {
     const canais = client.canais
@@ -9,15 +10,15 @@ module.exports = async function guildMemberRemove(client) {
         const memberName = member.displayName
         let memberImg = member.user.displayAvatarURL()
         if (!memberImg || member.user.avatar === null)
-            memberImg ='https://cdn.discordapp.com/embed/avatars/0.png?size=256'
+            memberImg = 'https://cdn.discordapp.com/embed/avatars/0.png?size=256'
         const goodbyeEmbed = new MessageEmbed()
             .setTitle("🔴 | Parece o fim da viagem")
-            .setColor('#992D22')
-            .addField('Até  @' + memberName[0].toUpperCase()+ memberName.substring(1), ' **Foi uma longa jornada, mas tudo tem um fim.**')
+            .setColor(client.getColor('log'))
+            .addField('Até  @' + memberName[0].toUpperCase() + memberName.substring(1), ' **Foi uma longa jornada, mas tudo tem um fim.**')
             .setThumbnail(memberImg)
             .setDescription('Esperamos que nossos caminhos se alinhem novamente!')
+            .setFooter(client.getFooter(message))
             .setTimestamp()
-            .setFooter(client.footer)
-        welcomeChannel.send({ embeds: [goodbyeEmbed]})
+        welcomeChannel.send({ embeds: [goodbyeEmbed] })
     })
 }
