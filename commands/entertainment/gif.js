@@ -1,5 +1,5 @@
 const { MessageEmbed } = require('discord.js')
-const gifSearch = require('../../utils/gifSearch')
+const { gifSearch } = require('../../utils')
 
 module.exports ={
     name: 'gif',
@@ -13,7 +13,7 @@ module.exports ={
             .setTitle('Aqui está seu gif!')
             .setImage(gif.image)
             .setURL(gif.url)
-            .setFooter(client.footer)
+            .setFooter(client.getFooter(message))
             .setTimestamp()
         message.reply({embeds: [gifEmbed]})
     }
