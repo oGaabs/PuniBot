@@ -7,7 +7,7 @@ module.exports = {
     args: '(Tema)',
     execute: async (message, args, client) => {
         const searchTerm = args[1] || 'pudim'
-        const gif = gifSearch.getGif(searchTerm)
+        const gif = await gifSearch.getGif(searchTerm)
 
         const gifEmbed = new MessageEmbed()
             .setTitle('Aqui está seu gif!')
