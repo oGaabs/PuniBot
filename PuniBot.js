@@ -17,7 +17,7 @@ module.exports = class PuniBot extends Client {
     }
 
     getFooter(message) {
-        return message ? { text: message.guild.name, iconURL: message.guild.iconURL() } : null
+        return message ? { text: message.guild.name, iconURL: message.guild.iconURL({ dynamic: true, size: 1024 }) } : null
     }
 
     initCommands(path) {

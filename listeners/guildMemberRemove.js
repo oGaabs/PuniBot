@@ -12,7 +12,7 @@ module.exports = async function guildMemberRemove(client) {
         if (!memberImg || member.user.avatar === null)
             memberImg = 'https://cdn.discordapp.com/embed/avatars/0.png?size=256'
         const goodbyeEmbed = new MessageEmbed()
-            .setTitle("🔴 | Parece o fim da viagem")
+            .setTitle('🔴 | Parece o fim da viagem')
             .setColor(client.getColor('log'))
             .addField('Até  @' + memberName[0].toUpperCase() + memberName.substring(1), ' **Foi uma longa jornada, mas tudo tem um fim.**')
             .setThumbnail(memberImg)

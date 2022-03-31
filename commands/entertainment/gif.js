@@ -3,10 +3,11 @@ const { gifSearch } = require('../../utils')
 
 module.exports = {
     name: 'gif',
-    description: "Mande um GIF!",
+    alises: ['tenor', 'g'],
+    description: 'Mande um GIF!',
     args: '(Tema)',
     execute: async (message, args, client) => {
-        const searchTerm = args[1] || 'pudim'
+        const searchTerm = args.join(' ') || 'pudim'
         const gif = await gifSearch.getGif(searchTerm)
 
         const gifEmbed = new MessageEmbed()

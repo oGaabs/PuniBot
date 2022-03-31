@@ -1,4 +1,4 @@
 module.exports = {
-    colors: require("./colors"),
+    colors: require('./colors'),
     gifSearch: require('./gifSearch')
 }

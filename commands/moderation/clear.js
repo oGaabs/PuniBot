@@ -2,12 +2,12 @@ const { MessageEmbed } = require('discord.js')
 
 module.exports = {
     name: 'clear',
-    description: "Limpa as mensagens!",
+    aliases: ['limpar', 'excluir', 'deletar',
+        'del', 'cl'],
+    description: 'Limpa as mensagens!',
     args: '(qtdMensagens)',
     execute: async (message, args, client) => {
-        if (!args[1]) return message.reply('Insira a quantidade de mensagens que você quer limpar!')
-        if (!args[1].toLowerCase() === 'all' && isNaN(args[1])) return message.reply('Insira apenas números!')
-        if (args[1] >= 100 || args[1] < 1) return message.reply('So é possível deletar de 1 a 99 mensagens!')
+        if (!args[0]) return message.reply('Insira a quantidade de mensagens que você quer limpar!')
 
         const permissionErrorEmbed = new MessageEmbed()
             .setTitle('**Erro:**', true)
@@ -18,24 +18,27 @@ module.exports = {
             .setTimestamp()
         if (!message.member.permissions.has('MANAGE_MESSAGES'))
             return message.channel.send({ embeds: [permissionErrorEmbed] })
-        const author = message.author
-        if (args[1].toLowerCase() === 'all') {
-            let countMsg = 0
-            while (true) {
-                const fetch = await message.channel.messages.fetch({ limit: 99 })
-                if (fetch.size == 0)
-                    return message.channel.send(`${author} ` + countMsg + ' mensagens limpadas com sucesso! 👍').then(msg => {
-                        setTimeout(() => msg.delete(), 3000)
-                    })
-                countMsg += fetch.size
-                await message.channel.bulkDelete(fetch)
+
+        let deletedCount = 0
+        if (args[0].toLowerCase() === 'all') {
+            let remainingMessages = 0
+            do {
+                await message.channel.bulkDelete(99, true).then(deletedMessages => {
+                    remainingMessages = deletedMessages.size
+                    deletedCount += remainingMessages
+                })
             }
+            while (remainingMessages != 0);
         }
-        await message.channel.messages.fetch({ limit: ++args[1] }).then(messages => {
-            args[1] = messages.size
-            message.channel.bulkDelete(messages)
-        })
-        return message.channel.send(`${author} ` + args[1] + ' mensagens limpadas com sucesso! 👍').then(msg => {
+        else {
+            if (isNaN(args[0])) return message.reply('Insira apenas números!')
+            if (args[0] >= 100 || args[0] < 1) return message.reply('So é possível deletar de 1 a 99 mensagens!')
+
+            await message.channel.bulkDelete(++args[0], true).then(deletedMessages => {
+                deletedCount += deletedMessages.size
+            })
+        }
+        message.channel.send(`${message.author} ` + deletedCount + ' mensagens limpadas com sucesso! 👍').then(msg => {
             setTimeout(() => msg.delete(), 3000)
         })
     }

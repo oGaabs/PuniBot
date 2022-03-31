@@ -16,7 +16,7 @@ module.exports = async function guildMemberAdd(client) {
         const color = client.getColor('default')
         const footer = client.getFooter(message)
         const welcomeEmbed = new MessageEmbed()
-            .setTitle("🌌 | Olá *Viajante*")
+            .setTitle('🌌 | Olá *Viajante*')
             .setColor(color)
             .addField("⁣", `<@!${member.id}> **Sabemos que a estrada a frente é longa e perigosa, por isso sua presença é imprescindível em nossa jornada!**`, true)
             .setDescription('Curta essa noite estrelada conosco, encontre seu cantinho e aproveite a viagem!  😉')

@@ -1,10 +1,11 @@
 const nodeFetch = require('node-fetch')
-
+// This module needs major rework, refactoring and urgent optimizations
+// Working
 module.exports = async function freeGamesReddit(client) {
     const freeGameChannel = client.canais.get('937164018282557470')
     const sentGames = []
 
-    // Call fetchGames every 1 hour (3600000 milliseconds)
+    // Call fetchGames every 1 minute (60000 milliseconds)
     setInterval(function () {
         sendGames()
 
@@ -21,8 +22,8 @@ module.exports = async function freeGamesReddit(client) {
     // Fetch posts from Reddit using node-fetch and return the body
     const fetchPosts = async () => {
         try {
-            const res = await nodeFetch('https://reddit.com/r/gamedeals/new.json?sort=new&t=week&limit=100')
-            const body = await res.json()
+            const body = await nodeFetch('https://reddit.com/r/gamedeals/new.json?sort=new&t=week&limit=100')
+                .then(res => res.json())
             if (!body.data)
                 return null
             if (!body.data.children || body.data.children <= 0)
