@@ -58,7 +58,7 @@ npm install node-fetch@2.6.7
 
 #### Dotenv:
 
-* **Using Dotenv 15.0.0**
+* **Using Dotenv 16.0.0**
 
 ```sh-session
 npm install dotenv --save
@@ -66,9 +66,19 @@ npm install dotenv --save
 
 ---
 
+#### Moment:
+
+* **Using Moment 2.29.1**
+
+```sh-session
+npm install moment --save
+```
+
+---
+
 #### Express:
 
-* **Using Express 4.17.2**
+* **Using Express 4.17.3**
 
 ```sh-session
 npm install express
