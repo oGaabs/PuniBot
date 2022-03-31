@@ -1,35 +1,19 @@
-const Fs = require('fs')
-
 module.exports = async function onMessage(client) {
-    const prefix = client.prefix
-    const commands = client.commands
+    const { prefix, commands } = client
     client.on('messageCreate', async message => {
-        if (message.author.bot) return
-        if (message.mentions.has(client.user)) commands.get('help').execute(message, '', client)
-        if (!message.content.toLowerCase().startsWith(prefix) || message.author.bot) return
-        const args = message.content.slice(prefix.length).split(/ +/)
-        args.shift()
-        const command = args[0].toLowerCase()
-        if ((initCommands('commands', command)))
-            commands.get(command).execute(message, args, client)
-    })
+        if (message.channel.type === 'DM' || message.author.bot) return
+        if (!message.content.toLowerCase().startsWith(prefix)) {
+            if (!message.mentions.has(client.user)) return
+            return commands.get('help').execute(message, null, client)
+        }
+        let args = message.content.slice(prefix.length).trim().split(/\s+/)
+        if (!args) return
 
-    function initCommands(path, command) {
-        let result = false
-        Fs.readdirSync(path).forEach(file => {
-            try {
-                let filePath = path + '/' + file
-                if (file.endsWith('.js') && file.replace('.js', '') === command)
-                    result = true
-                if (Fs.lstatSync(filePath).isDirectory()) {
-                    if (initCommands(filePath, command))
-                        result = true
-                }
-            }
-            catch (err) {
-                console.error(err)
-            }
-        })
-        return result
-    }
+        const commandName = args[0].toLowerCase()
+        const command = commands.find(cmd => cmd.name === commandName || (cmd.aliases && cmd.aliases.includes(commandName)))
+        if (!command) return
+
+        args.shift()
+        command.execute(message, args, client)
+    })
 }
