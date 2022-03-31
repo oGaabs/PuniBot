@@ -11,7 +11,7 @@ module.exports = {
         const users = message.mentions.users.first(2)
         if (!users || users.length < 1) {
             return message.reply('Mencione corretamente os apaixonados\n' +
-                `Exemplo: ${client.prefix} tolove <@407734609967841299> <@382990022191874048>`);
+                `Exemplo: ${client.prefix} tolove <@407734609967841299> <@382990022191874048>`)
         }
         const pessoa1 = users.at(0)
         const pessoa2 = users.at(1) ? users.at(1) : message.author
@@ -19,10 +19,10 @@ module.exports = {
         const searchTerm = 'anime crush'
         const gif = await gifSearch.getGif(searchTerm)
 
-        const lovePercentage = Math.floor(Math.random() * 101); // Porcentagem de amor
-        const loveLevel = Math.floor(lovePercentage / 6); // Define a quantidade de corações
+        const lovePercentage = Math.floor(Math.random() * 101) // Porcentagem de amor
+        const loveLevel = Math.floor(lovePercentage / 6) // Define a quantidade de corações
 
-        const loveHeartBar = '💗'.repeat(loveLevel) + '🤍'.repeat(16 - loveLevel);
+        const loveHeartBar = '💗'.repeat(loveLevel) + '🤍'.repeat(16 - loveLevel)
 
         const frasesResultantes = [
             { frase: '**Uhm.. Não deu match! 💔😭**', max: 12 }, //  até 12 %
@@ -36,7 +36,7 @@ module.exports = {
         ]
         let frase
         for (let index = 0; index < frasesResultantes.length; index++) {
-            const fraseIndex = frasesResultantes[index];
+            const fraseIndex = frasesResultantes[index]
             const maxRange = fraseIndex.max
             if (lovePercentage <= maxRange) {
                 frase = fraseIndex.frase
@@ -49,7 +49,7 @@ module.exports = {
             .setColor(client.getColor('default'))
             .setImage(gif.image)
             .setURL(gif.url)
-            .addField("⁣", `** ${Math.floor(lovePercentage)}% [ ${loveHeartBar} ] **`)
+            .addField('⁣', `** ${Math.floor(lovePercentage)}% [ ${loveHeartBar} ] **`)
             .setFooter(client.getFooter(message))
             .setTimestamp()
         await message.channel.send({
