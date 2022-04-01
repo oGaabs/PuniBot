@@ -17,7 +17,7 @@ module.exports = async function guildMemberRemove(client) {
             .addField('Até  @' + memberName[0].toUpperCase() + memberName.substring(1), ' **Foi uma longa jornada, mas tudo tem um fim.**')
             .setThumbnail(memberImg)
             .setDescription('Esperamos que nossos caminhos se alinhem novamente!')
-            .setFooter(client.getFooter(message))
+            .setFooter(client.getFooter(message.guild))
             .setTimestamp()
         welcomeChannel.send({ embeds: [goodbyeEmbed] })
     })

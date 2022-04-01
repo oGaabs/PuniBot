@@ -12,10 +12,10 @@ module.exports = {
         let userTarget = message.mentions.users.first()
         if (!userTarget || userTarget.length < 1) {
             return message.reply('Mencione o usuario corretamente\n' +
-                `Exemplo: ${client.prefix} avatar <@407734609967841299>`);
+                `Exemplo: ${client.prefix} avatar <@407734609967841299>`)
         }
         const { nickname: userAlias, tag: userTag, id: userId,
-            username: userName, presence: userPresence } = userTarget
+                username: userName, presence: userPresence } = userTarget
 
         userTarget = await message.guild.members.cache.get(userId)
         const UserRoles = userTarget.roles.cache.map(r => r).slice(0, -1).join('\n')

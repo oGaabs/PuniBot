@@ -14,7 +14,7 @@ module.exports = {
             .setColor(client.getColor('default'))
             .addField('*Verifique se você possui a permissão:*', '`MANAGE_MESSAGES`', true)
             .setDescription('Missing Permissions')
-            .setFooter(client.getFooter(message))
+            .setFooter(client.getFooter(message.guild))
             .setTimestamp()
         if (!message.member.permissions.has('MANAGE_MESSAGES'))
             return message.channel.send({ embeds: [permissionErrorEmbed] })
@@ -28,7 +28,7 @@ module.exports = {
                     deletedCount += remainingMessages
                 })
             }
-            while (remainingMessages != 0);
+            while (remainingMessages != 0)
         }
         else {
             if (isNaN(args[0])) return message.reply('Insira apenas números!')

@@ -24,8 +24,8 @@ module.exports = {
 
         function getMeaningEmbed(wordInfo) {
             const { class: wordClass,
-                meanings: wordMeanings,
-                etymology: wordEtymology } = JSON.parse(JSON.stringify(wordInfo).replace('\"\"', '\"Não fornecido\"'))
+                    meanings: wordMeanings,
+                    etymology: wordEtymology } = JSON.parse(JSON.stringify(wordInfo).replace('\\"\\"', '\\"Não fornecido\\"'))
             const meaningEmbed = new MessageEmbed()
                 .setColor(client.getColor('alert'))
                 .setTitle(searchTerm.toUpperCase())

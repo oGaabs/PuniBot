@@ -14,7 +14,7 @@ module.exports = {
             .setTitle('Aqui está seu gif!')
             .setImage(gif.image)
             .setURL(gif.url)
-            .setFooter(client.getFooter(message))
+            .setFooter(client.getFooter(message.guild))
             .setTimestamp()
         message.reply({ embeds: [gifEmbed] })
     }

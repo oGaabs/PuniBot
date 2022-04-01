@@ -9,7 +9,7 @@ module.exports = {
         const pingingEmbed = new MessageEmbed()
             .setTitle('**Calculando...**')
             .setColor(client.getColor('default'))
-            .setFooter(client.getFooter(message))
+            .setFooter(client.getFooter(message.guild))
         await message.channel.send({ embeds: [pingingEmbed] }).then(m => {
             const latencyEmbed = new MessageEmbed()
                 .setTitle('**🏓 PONG! 🏓**')

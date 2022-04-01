@@ -50,7 +50,7 @@ module.exports = {
             .setImage(gif.image)
             .setURL(gif.url)
             .addField('⁣', `** ${Math.floor(lovePercentage)}% [ ${loveHeartBar} ] **`)
-            .setFooter(client.getFooter(message))
+            .setFooter(client.getFooter(message.guild))
             .setTimestamp()
         await message.channel.send({
             content: '💗 **MATCHMAKING **💗\n' +

@@ -1,6 +1,6 @@
 const { MessageEmbed } = require('discord.js')
 
-module.exports = async function onGuildBanAdd(client, _message) {
+module.exports = async function onGuildBanAdd(client, message) {
     const logsChannel = client.canais.get('926542213012389959')
     const guild = client.guilds.cache.get('926539282733203546')
 
@@ -25,7 +25,7 @@ module.exports = async function onGuildBanAdd(client, _message) {
                                  **ID:** ${target.id}`)
             .setThumbnail(target.displayAvatarURL({ dynamic: true, size: 1024 }))
             .setImage('https://media.discordapp.net/attachments/806749828943970315/905317119321858078/df54d411305571ca5d82371db65a97ea.gif')
-            .setFooter(client.getFooter(message))
+            .setFooter(client.getFooter(message.guild))
             .setTimestamp()
         logsChannel.send({ embeds: [banned] })
     }

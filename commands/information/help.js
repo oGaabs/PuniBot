@@ -8,7 +8,7 @@ module.exports = {
     execute: async (message, _args, client) => {
         const commands = JSON.parse(JSON.stringify(client.commands)).map(cmd => {
             let cmdName = client.prefix + ' ' + cmd.name
-            if (cmd.hasOwnProperty('args'))
+            if (Object.prototype.hasOwnProperty.call(cmd, 'args'))
                 cmdName += ' ' + cmd.args
             return {
                 name: cmdName,
@@ -29,16 +29,16 @@ module.exports = {
                 },
                 {
                     name: 'Convide mais pessoas ao servidor!',
-                    value: `[Invite Link](https://discord.gg/4YCgPhSnmM)`
+                    value: '[Invite Link](https://discord.gg/4YCgPhSnmM)'
                 }
             )
-            .setFooter(client.getFooter(message))
+            .setFooter(client.getFooter(message.guild))
             .setTimestamp()
 
         const pudimEmbed = new MessageEmbed()
             .setTitle('🍮| PUDIM')
             .setThumbnail('https://revistamenu.com.br/wp-content/uploads/2020/05/diadopudim-1280x720.jpg')
-            .setFooter(client.getFooter(message))
+            .setFooter(client.getFooter(message.guild))
             .setTimestamp()
         message.channel.send({ embeds: [helpEmbed, pudimEmbed] })
     }

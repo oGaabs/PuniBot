@@ -13,11 +13,11 @@ module.exports = class PuniBot extends Client {
 
     getColor(color) {
         const colorsJSON = JSON.parse(JSON.stringify(colors))
-        return colorsJSON.hasOwnProperty(color) ? colorsJSON[color] : null
+        return Object.prototype.hasOwnProperty.call(colorsJSON, color) ? colorsJSON[color] : null
     }
 
-    getFooter(message) {
-        return message ? { text: message.guild.name, iconURL: message.guild.iconURL({ dynamic: true, size: 1024 }) } : null
+    getFooter(guild) {
+        return guild ? { text: guild.name, iconURL: guild.iconURL({ dynamic: true, size: 1024 }) } : null
     }
 
     initCommands(path) {

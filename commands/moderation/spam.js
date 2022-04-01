@@ -15,7 +15,7 @@ module.exports = {
             .setColor(client.getColor('default'))
             .addField('*Verifique se você possui a permissão:*', '`ADMINISTRATOR`', true)
             .setDescription('Missing Permissions')
-            .setFooter(client.getFooter(message))
+            .setFooter(client.getFooter(message.guild))
             .setTimestamp()
         if (!message.member.permissions.has('ADMINISTRATOR'))
             return message.channel.send({ embeds: [permissionErrorEmbed] })

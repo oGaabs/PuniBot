@@ -1,8 +1,8 @@
 module.exports = async function botActivity(client) {
     const { guild: guild,
-        user: puniBot,
-        user: { tag: botTag },
-        prefix: botPrefix } = client
+            user: puniBot,
+            user: { tag: botTag },
+            prefix: botPrefix } = client
 
     const stats = ['online', 'dnd', 'idle']
     const statsLength = stats.length

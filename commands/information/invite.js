@@ -11,7 +11,7 @@ module.exports = {
             .setColor(client.getColor('default'))
             .addField('*Verifique se você possui a permissão:*', '`CREATE_INSTANT_INVITE`', true)
             .setDescription('Missing Permissions')
-            .setFooter(client.getFooter(message))
+            .setFooter(client.getFooter(message.guild))
             .setTimestamp()
         if (!user.permissions.has('CREATE_INSTANT_INVITE'))
             return message.channel.send({ embeds: [permissionErrorEmbed] })
@@ -31,7 +31,7 @@ module.exports = {
             .setTitle(' **Puni Invite** ')
             .setColor(client.getColor('default'))
             .setDescription(`Quer me convidar para seu servidor? Entre por aqui ${invite}`)
-            .setFooter(client.getFooter(message))
+            .setFooter(client.getFooter(message.guild))
             .setTimestamp()
         message.reply({ embeds: [inviteEmbed] })
     }
