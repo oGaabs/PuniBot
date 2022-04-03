@@ -3,7 +3,7 @@ const { gifSearch } = require('../../utils')
 
 module.exports = {
     name: 'gif',
-    alises: ['tenor', 'g'],
+    aliases: ['tenor', 'g'],
     description: 'Mande um GIF!',
     args: '(Tema)',
     execute: async (message, args, client) => {

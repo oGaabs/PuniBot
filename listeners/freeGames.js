@@ -22,17 +22,20 @@ module.exports = async function freeGamesReddit(client) {
     // Fetch posts from Reddit using node-fetch and return the body
     const fetchPosts = async () => {
         try {
-            const body = await nodeFetch('https://reddit.com/r/gamedeals/new.json?sort=new&t=week&limit=100')
-                .then(res => res.json())
+            let body
+            try{
+                body = await nodeFetch('https://reddit.com/r/gamedeals/new.json?sort=new&t=week&limit=100').catch()
+                    .then(res => res.json())
+            }
+            catch (err) { return null }
+
             if (!body.data)
                 return null
             if (!body.data.children || body.data.children <= 0)
                 return 'invalid'
             return body
         }
-        catch (err) {
-            console.log(err)
-        }
+        catch (err) { console.log(err) }
     }
 
     const checkPost = (postTitle) => {
