@@ -16,3 +16,6 @@ $RECYCLE.BIN/
 
 # Folder config file
 [Dd]esktop.ini
+
+# Replit config
+/.replit
