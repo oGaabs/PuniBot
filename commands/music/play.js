@@ -1,14 +1,15 @@
+
 const youtube = require('ytdl-core')
 const youtubeSearch = require('ytsr')
 const youtubePlaylist = require('ytpl')
-const { createAudioPlayer, createAudioResource,
-        getVoiceConnection, joinVoiceChannel } = require('@discordjs/voice')
+const { MessageEmbed } = require('discord.js')
+const { createAudioPlayer, createAudioResource, joinVoiceChannel } = require('@discordjs/voice')
 
 
 const queue = new Map() // {message.guild.id, queue_constructor}, Recebe um object com o id da guild e o queue
 module.exports = {
     name: 'play',
-    alises: ['tocar'],
+    aliases: ['tocar'],
     description: 'Tocar uma música',
     args: 'Link do video',
     execute: async (message, args, client) => {
@@ -25,19 +26,19 @@ module.exports = {
         const serverQueue = queue.get(messageGuild.id)
         client.queue = queue
 
-        const soundArray = await getVideosFromLink(args[0])
-        if (!soundArray) return message.reply('Video não foi encontrado, certifique-se que é um link do Youtube valido!')
+        const soundArray = await getVideosFromLink(args.join(' '))
+        if (soundArray === null) return message.reply('Video não foi encontrado, certifique-se que é um link do Youtube valido!')
 
         if (serverQueue && messageGuild.me.voice.channel) return addSoundToQueue(soundArray, serverQueue)
 
         const player = createAudioPlayer()
-        const queueConstructor = {
+        let queueConstructor = {
             textChannel: message.channel,
             voiceChannel,
             connection: null,
             songs: [],
             player,
-            playing: true
+            autoPlay: false
         }
 
         queue.set(messageGuild.id, queueConstructor)
@@ -56,10 +57,8 @@ module.exports = {
             queue.delete(messageGuild.id)
             return message.reply('Não foi possível entrar no canal de voz!')
         }
-        let queueSongs = queueConstructor.songs
-        const { stream, title } = queueSongs[0]
 
-        playSong(connection, stream, title)
+        playSong(connection, queueConstructor.songs[0])
 
         player.on('idle', () => {
             nextSong(connection)
@@ -68,39 +67,74 @@ module.exports = {
             stopSong()
         })
         player.on('error', err => {
+            stopSong()
             console.log(err)
         })
         client.on('voiceStateUpdate', (oldState, newState) => {
-            if (!oldState.channelId || newState.channelId || connection.state.status === 'disconnected') return
-            connection.destroy()
+            if (!oldState.channelId || newState.channelId || connection.state.status === 'disconnected' || connection.state.status === 'destroyed')
+                return
+            try {
+                stopSong()
+            }
+            catch (err) {console.log(err)}
         })
 
-        async function playSong(connection, stream, title) {
-            const resource = createAudioResource(stream)
-            await connection.subscribe(player)
+        async function playSong(connection, { stream, title, url, thumbnail, requestBy}) {
+            const youtubeOptions = { filter: 'audioonly', type: 'opus', quality: 'highestaudio' , highWaterMark: 1 << 25}
+            const audio = youtube(stream, youtubeOptions)
+
+            const resource = createAudioResource(audio, {highWaterMark: 1})
+            await connection.subscribe(player, {highWaterMark: 1})
             player.play(resource)
-            message.channel.send(`Tocando **${title}** neste momento!`)
+
+            const songEmbed = new MessageEmbed()
+                .setColor(client.getColor('default'))
+                .setTitle('Now playing')
+                .setThumbnail(thumbnail)
+                .setDescription(`**[${title}](${url})**`)
+                .addFields(
+                    {
+                        name: '**Requisitada pelo(a)**',
+                        value: requestBy,
+                        inline: true
+                    },
+                    {
+                        name: 'Link',
+                        value: `**[${url}](${url})**`,
+                        inline: true
+                    }
+                )
+            message.channel.send({ embeds: [songEmbed] })
         }
 
         async function nextSong(connection) {
-            queueSongs.shift()
-            if (!queueSongs.length) {
-                message.channel.send('Acabaram as músicas. Desconectando...')
-                getVoiceConnection(messageGuild.id).disconnect()
+            const currentlySong = queueConstructor.songs.shift()
+            if (queueConstructor.autoPlay)
+                queueConstructor.songs.push(currentlySong)
+            if (!queueConstructor.songs.length) {
+                const endEmbed = new MessageEmbed()
+                    .setColor(client.getColor('default'))
+                    .setTitle('🎵 | Acabaram as músicas. Desconectando...')
+                message.channel.send({ embeds: [endEmbed] })
+                // return getVoiceConnection(messageGuild.id).disconnect()
                 return connection.destroy()
             }
-            const { stream, title } = queueSongs[0]
-            playSong(connection, stream, title)
+
+            playSong(connection, queueConstructor.songs[0])
         }
 
         async function stopSong() {
-            queueSongs = []
-            getVoiceConnection(messageGuild.id).disconnect()
+            connection.destroy()
+            queueConstructor = {}
         }
 
         async function getVideosFromLink(sourceVideo) {
             let soundArray = [{}]
             const playlistRegex = /^https?:\/\/(www.youtube.com|youtube.com)\/playlist(.*)$/
+
+            const playEmbed = new MessageEmbed()
+                .setColor(client.getColor('default'))
+
 
             if (sourceVideo.match(playlistRegex)) {
                 let playlist = await youtubePlaylist(sourceVideo, { limit: 100 }).then(res => res.items)
@@ -113,11 +147,12 @@ module.exports = {
                     catch (err) { continue }
                 }
 
-                const tempMessage = await message.channel.send('Adicionando a playlist... aguarde!')
+                playEmbed.setTitle('Adicionando a playlist... aguarde!')
+                const playMessage = await message.channel.send({ embeds: [playEmbed] })
 
                 soundArray = await Promise.all(soundArray)
-                tempMessage.delete()
-                message.channel.send('Playlist adicionada com sucesso!')
+                playEmbed.setTitle('🎵 | Playlist adicionada com sucesso!')
+                playMessage.edit({ embeds: [playEmbed] })
                 return soundArray
             }
 
@@ -126,8 +161,10 @@ module.exports = {
                 soundArray.push(song)
                 return soundArray
             }
-
-            const searchTitle = await youtubeSearch(sourceVideo, { limit: 5 })
+            const filterVideos = await youtubeSearch.getFilters(sourceVideo).then(
+                res => res.get('Type').get('Video')
+            )
+            const searchTitle = await youtubeSearch(filterVideos.url, { limit: 5 })
             if (searchTitle) {
                 const song = await getInfoFromLink(searchTitle.items[0].url)
                 soundArray.push(song)
@@ -145,14 +182,21 @@ module.exports = {
 
         async function getInfoFromLink(videoLink, isPlaylist) {
             const songInfo = await youtube.getBasicInfo(videoLink).then(info => info.videoDetails)
-            const shortUrl = 'youtu.be/'+ songInfo.videoId
+            const shortUrl = 'https://youtu.be/'+ songInfo.videoId
+            const thumbnail = songInfo.thumbnails.pop()
 
-            const youtubeOptions = { filter: 'audioonly', type: 'opus', quality: 'highestaudio' }
             const song = {
-                stream: youtube(videoLink, youtubeOptions),
-                title: songInfo.title, url: shortUrl
+                stream: videoLink,
+                title: songInfo.title, url: shortUrl,
+                thumbnail: thumbnail.url, requestBy: message.author.toString()
             }
-            if (!isPlaylist) message.channel.send(`**${song.title}** adicionado a playlist!`)
+
+            if (!isPlaylist){
+                const playEmbed = new MessageEmbed()
+                    .setColor(client.getColor('default'))
+                    .setTitle(`🎵 | **${song.title}** adicionado a playlist!`)
+                message.channel.send({ embeds: [playEmbed] })
+            }
             return song
         }
     }

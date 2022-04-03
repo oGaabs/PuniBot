@@ -1,6 +1,6 @@
 module.exports = {
     name: 'stop',
-    alises: ['parar','clear','limpar'],
+    aliases: ['parar','clear','limpar','desconectar','disconnect'],
     description: 'Parar playlist',
     execute: async (message, _args, _client) => {
         const voiceChannel = message.member.voice.channel
