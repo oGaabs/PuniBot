@@ -10,6 +10,7 @@ const client = new PuniBot({ intents: new Intents(32767) })
 client.once('ready', async () => {
     const botOwner = await client.application.fetch().then(app => client.users.fetch(app.owner))
 
+    client.botOwner = botOwner
     client.guild = client.guilds.cache.get('926539282733203546')
     client.canais = client.channels.cache
     client.initListeners('./listeners')
