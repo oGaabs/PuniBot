@@ -35,7 +35,7 @@ client.once('ready', async () => {
         })
     })
 
-    console.log(`Memory: ${Math.round(process.memoryUsage().rss / 1024 / 1024 * 100) / 100} MB`)
+    console.log(`Memory: ${Math.round(process.memoryUsage().rss / 1024 / 1024 * 100) / 100}/1024 MB`)
 })
 
 process.on('unhandledRejection', error => {
