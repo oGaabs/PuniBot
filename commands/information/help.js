@@ -19,12 +19,12 @@ module.exports = {
 
         const helpEmbed = new MessageEmbed()
             .setTitle('🟣 | A AJUDA CHEGOU')
-            .setColor(client.getColor('default'))
+            .setColor(client.colors['default'])
             .setDescription('Sou um simples bot de moderação que fabrica Pudims!')
             .addFields(
                 commands,
                 {
-                    name: `${client.user.tag} Bot 🍮`,
+                    name: `${client.tag} Bot 🍮`,
                     value: `Atualmente temos ${message.guild.memberCount} membros e ${commands.length} comandos em nosso bot!`
                 },
                 {

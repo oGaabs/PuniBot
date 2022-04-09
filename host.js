@@ -8,7 +8,7 @@ server.all('/', async (_req, res) => {
 })
 
 function startHost() {
-    server.listen(porta, () => console.log('> Servidor NodeJS funcionando na porta ' + porta + '.'))
+    server.listen(porta, () => console.log('\n> Servidor NodeJS funcionando na porta ' + porta + '.\n'))
 }
 
 module.exports = startHost

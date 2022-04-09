@@ -4,7 +4,7 @@ module.exports = {
         'steam', 'epicgames', 'epic', 'f'],
     description: 'Send free games!',
     execute: async (message, _args, _client) => {
-        const freeGames = require(process.cwd() + '/listeners/freeGames.js')
+        const freeGames = require(process.cwd() + '/listeners/freeGamesReddit.js')
         freeGames.sendGames(message.channel.id)
     }
 }

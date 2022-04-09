@@ -27,7 +27,7 @@ module.exports = {
                     meanings: wordMeanings,
                     etymology: wordEtymology } = JSON.parse(JSON.stringify(wordInfo).replace('\\"\\"', '\\"Não fornecido\\"'))
             const meaningEmbed = new MessageEmbed()
-                .setColor(client.getColor('alert'))
+                .setColor(client.colors['alert'])
                 .setTitle(searchTerm.toUpperCase())
                 .setURL(`https://www.google.com/search?q=${searchTerm}`)
                 .addFields(

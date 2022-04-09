@@ -26,7 +26,7 @@ module.exports = {
         const userAvatarUrl = userTarget.displayAvatarURL({ dynamic: true, size: 1024 })
         const userEmbed = new MessageEmbed()
             .setAuthor({ name: userName, url: userAvatarUrl, iconURL: userAvatarUrl })
-            .setColor(client.getColor('black'))
+            .setColor(client.colors['black'])
             .setThumbnail(userAvatarUrl)
             .addFields(
                 { name: 'Discord Tag', value: `\`\`\`md\n${userTag}\`\`\``, inline: true },

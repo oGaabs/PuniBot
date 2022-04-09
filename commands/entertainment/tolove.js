@@ -3,7 +3,7 @@ const { gifSearch } = require('../../utils')
 
 module.exports = {
     name: 'tolove',
-    aliases: ['shipar', 'tolove', 'tolover', 'love', 'amor',
+    aliases: ['shipar', 'tolove', 'tolover', 'love', 'amor','ship',
         'matchmaking', 'match', 'tinder'],
     description: 'É um Amor verdadeiro?',
     args: '@(Pessoa1) @(Pessoa2)',
@@ -46,7 +46,7 @@ module.exports = {
 
         const loveEmbed = new MessageEmbed()
             .setTitle(frase)
-            .setColor(client.getColor('default'))
+            .setColor(client.colors['default'])
             .setImage(gif.image)
             .setURL(gif.url)
             .addField('⁣', `** ${Math.floor(lovePercentage)}% [ ${loveHeartBar} ] **`)

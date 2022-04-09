@@ -8,12 +8,12 @@ module.exports = {
     execute: async (message, _args, client) => {
         const pingingEmbed = new MessageEmbed()
             .setTitle('**Calculando...**')
-            .setColor(client.getColor('default'))
+            .setColor(client.colors['default'])
             .setFooter(client.getFooter(message.guild))
         await message.channel.send({ embeds: [pingingEmbed] }).then(m => {
             const latencyEmbed = new MessageEmbed()
                 .setTitle('**🏓 PONG! 🏓**')
-                .setColor(client.getColor('default'))
+                .setColor(client.colors['default'])
                 .addFields(
                     { name: 'Bot Latency:', value: `${(m.createdTimestamp - message.createdTimestamp)} ms` },
                     { name: 'API Latency:', value: `${Math.round(client.ws.ping)} ms`, inline: true },

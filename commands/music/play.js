@@ -88,7 +88,7 @@ module.exports = {
             player.play(resource)
 
             const songEmbed = new MessageEmbed()
-                .setColor(client.getColor('default'))
+                .setColor(client.colors['default'])
                 .setTitle('Now playing')
                 .setThumbnail(thumbnail)
                 .setDescription(`**[${title}](${url})**`)
@@ -113,7 +113,7 @@ module.exports = {
                 queueConstructor.songs.push(currentlySong)
             if (!queueConstructor.songs.length) {
                 const endEmbed = new MessageEmbed()
-                    .setColor(client.getColor('default'))
+                    .setColor(client.colors['default'])
                     .setTitle('🎵 | Acabaram as músicas. Desconectando...')
                 message.channel.send({ embeds: [endEmbed] })
                 // return getVoiceConnection(messageGuild.id).disconnect()
@@ -133,7 +133,7 @@ module.exports = {
             const playlistRegex = /^https?:\/\/(www.youtube.com|youtube.com)\/playlist(.*)$/
 
             const playEmbed = new MessageEmbed()
-                .setColor(client.getColor('default'))
+                .setColor(client.colors['default'])
 
 
             if (sourceVideo.match(playlistRegex)) {
@@ -193,7 +193,7 @@ module.exports = {
 
             if (!isPlaylist){
                 const playEmbed = new MessageEmbed()
-                    .setColor(client.getColor('default'))
+                    .setColor(client.colors['default'])
                     .setTitle(`🎵 | **${song.title}** adicionado a playlist!`)
                 message.channel.send({ embeds: [playEmbed] })
             }

@@ -15,7 +15,7 @@ module.exports = {
         serverQueue.autoPlay = status
 
         const autoplayEmbed = new MessageEmbed()
-            .setColor(client.getColor('default'))
+            .setColor(client.colors['default'])
             .setTitle(`🎵 | AutoPlay: ${status ? 'ON' : 'OFF'}`)
         message.channel.send({ embeds: [autoplayEmbed] })
     }

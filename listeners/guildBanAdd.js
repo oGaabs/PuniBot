@@ -1,7 +1,7 @@
 const { MessageEmbed } = require('discord.js')
 
-module.exports = async function onGuildBanAdd(client, message) {
-    const logsChannel = client.canais.get('926542213012389959')
+module.exports = async function guildBanAdd(client, message) {
+    const logsChannel = client.channels.cache.get('926542213012389959')
     const guild = client.guilds.cache.get('926539282733203546')
 
     client.on('guildBanAdd', async ban => {
@@ -17,7 +17,7 @@ module.exports = async function onGuildBanAdd(client, message) {
         const { executor, target } = banLog
         const banned = new MessageEmbed()
             .setTitle('Ação | Ban')
-            .setColor(client.getColor('log'))
+            .setColor(client.colors['log'])
             .setDescription(`**Banido!** \n \n
                                  **Staff:**  ${executor.tag} \n
                                  **ID:**  ${executor.id}` + `\n

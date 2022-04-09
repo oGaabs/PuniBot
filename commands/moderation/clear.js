@@ -11,7 +11,7 @@ module.exports = {
 
         const permissionErrorEmbed = new MessageEmbed()
             .setTitle('**Erro:**', true)
-            .setColor(client.getColor('default'))
+            .setColor(client.colors['default'])
             .addField('*Verifique se você possui a permissão:*', '`MANAGE_MESSAGES`', true)
             .setDescription('Missing Permissions')
             .setFooter(client.getFooter(message.guild))

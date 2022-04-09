@@ -15,7 +15,7 @@ module.exports = {
         const songUrl = currentlySong.url
 
         const songEmbed = new MessageEmbed()
-            .setColor(client.getColor('default'))
+            .setColor(client.colors['default'])
             .setTitle('Now playing')
             .setThumbnail(currentlySong.thumbnail)
             .setDescription(`**[${currentlySong.title}](${songUrl})**`)

@@ -1,7 +1,7 @@
 module.exports = async function botActivity(client) {
-    const { guild: guild,
-            user: puniBot,
-            user: { tag: botTag },
+    const guild = client.guilds.cache.get('926539282733203546')
+    const { user: puniBot,
+            tag: botTag ,
             prefix: botPrefix } = client
 
     const stats = ['online', 'dnd', 'idle']

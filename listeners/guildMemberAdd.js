@@ -1,7 +1,7 @@
 const { MessageEmbed } = require('discord.js')
 
 module.exports = async function guildMemberAdd(client) {
-    const canais = client.canais
+    const canais = client.channels.cache
     const welcomeChannel = canais.get('926540915819028521')
     const generalChannel = canais.get('926546664783773847')
 
@@ -13,7 +13,7 @@ module.exports = async function guildMemberAdd(client) {
         let memberImg = member.user.displayAvatarURL()
         if (!memberImg || member.user.avatar === null)
             memberImg = 'https://cdn.discordapp.com/embed/avatars/0.png?size=256'
-        const color = client.getColor('default')
+        const color = client.colors['default']
         const footer = client.getFooter(member.guild)
         const welcomeEmbed = new MessageEmbed()
             .setTitle('🌌 | Olá *Viajante*')

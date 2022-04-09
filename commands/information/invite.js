@@ -8,7 +8,7 @@ module.exports = {
         const user = message.member
         const permissionErrorEmbed = new MessageEmbed()
             .setTitle('**Erro:**', true)
-            .setColor(client.getColor('default'))
+            .setColor(client.colors['default'])
             .addField('*Verifique se você possui a permissão:*', '`CREATE_INSTANT_INVITE`', true)
             .setDescription('Missing Permissions')
             .setFooter(client.getFooter(message.guild))
@@ -29,7 +29,7 @@ module.exports = {
         const inviteEmbed = new MessageEmbed()
             .setThumbnail(client.user.displayAvatarURL({ dynamic: true, size: 1024 }))
             .setTitle(' **Puni Invite** ')
-            .setColor(client.getColor('default'))
+            .setColor(client.colors['default'])
             .setDescription(`Quer me convidar para seu servidor? Entre por aqui ${invite}`)
             .setFooter(client.getFooter(message.guild))
             .setTimestamp()

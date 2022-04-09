@@ -1,5 +1,5 @@
 module.exports = async function autoRole(client) {
-    const guild = client.guild
+    const guild = client.guilds.cache.get('926539282733203546')
     const separadorRole = guild.roles.cache.get('926709141014196265')
     const viajanteRole = guild.roles.cache.get('930038268173643808')
     const botRole = guild.roles.cache.get('926567305155055717')

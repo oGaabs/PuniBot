@@ -22,7 +22,7 @@ module.exports = {
             playlist.push(`**[${title.substring(0, 51)}](${url})**\n`)
         }
         const listEmbed = new MessageEmbed()
-            .setColor(client.getColor('default'))
+            .setColor(client.colors['default'])
             .setTitle('Lista de Reprodução')
             .setThumbnail(currentlySong.thumbnail)
             .setDescription(`Now playing: **[${currentlySong.title.substring(0, 51)}](${currentlySong.url})**\n\n`+
