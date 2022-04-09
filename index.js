@@ -11,8 +11,7 @@ client.once('ready', async () => {
     const botOwner = await client.application.fetch().then(app => client.users.fetch(app.owner))
 
     client.botOwner = botOwner
-    client.guild = client.guilds.cache.get('926539282733203546')
-    client.canais = client.channels.cache
+    client.tag = client.user.tag
     client.initListeners('./listeners')
     client.initCommands('./commands')
 
@@ -29,25 +28,18 @@ client.once('ready', async () => {
         const botPing = finalMessage.createdTimestamp - startMessage.createdTimestamp
         const apiPing = Math.round(client.ws.ping)
 
-        botOwner.send(`Bot Latency: ${botPing} ms, API Latency: ${apiPing} ms`).then(botStatistic => {
-            finalMessage.delete()
-            console.log(botStatistic.content + '\n')
-        })
+        botOwner.send(`Bot Latency: ${botPing} ms, API Latency: ${apiPing} ms`)
+        finalMessage.delete()
+
+        client.logger.warn('',`\n[${client.logger.getDate()}] PuniBOT is ready!`, true)
+        client.logger.error('=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=','', true)
+        client.logger.debug('Bot: ', client.tag, true)
+        client.logger.debug('Status: ', 'Initialized', true)
+        client.logger.debug('Memory: ', `${Math.round(process.memoryUsage().rss / 1024 / 1024 * 100) / 100}/1024 MB`, true)
+        client.logger.debug('Bot Latency: ',`${botPing} ms`, true)
+        client.logger.debug('API Latency: ',`${apiPing} ms`, true)
+        client.logger.error('=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=','\n', true)
     })
-
-    console.log(`Memory: ${Math.round(process.memoryUsage().rss / 1024 / 1024 * 100) / 100}/1024 MB`)
 })
 
-process.on('unhandledRejection', error => {
-    console.log(`Erro : ${error}\nLogando novamente...`, error)
-    client.destroy()
-    botLogin()
-})
-
-function botLogin() {
-    client.login(process.env.TOKEN)
-        .then(() => console.log(`\nLogado como ${client.user.tag}.`))
-        .catch(err => console.log(`Falha ao iniciar o bot : ${err}`))
-}
-
-botLogin()
+client.loginBot(process.env.TOKEN)

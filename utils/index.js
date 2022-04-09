@@ -1,4 +1,5 @@
 module.exports = {
     colors: require('./colors'),
-    gifSearch: require('./gifSearch')
+    gifSearch: require('./gifSearch'),
+    logger: require('./logger')
 }
