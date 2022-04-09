@@ -33,7 +33,7 @@ Only install "devDependencies"
 npm install --dev
 ```
 
-### Install dependencies individually
+### Some requires for install
 
 #### Discord.js:
 
@@ -45,7 +45,6 @@ npm install discord.js
 ```
 
 ---
-
 #### Node-fetch:
 
 * **Node-fetch 2.6.x is required.**
@@ -56,33 +55,32 @@ npm install node-fetch@2.6.7
 
 ---
 
-#### Dotenv:
+## Features:
 
-* **Using Dotenv 16.0.0**
+* Highly and Shallow Design in Debug
+* Focus on high performance
 
-```sh-session
-npm install dotenv --save
-```
+#### Commands
 
----
+* MusicBot( Play, Stop, Skip, Queue, Loop, ...)
+* Entertainment( Flip a coin, Search Gifs, and Ship Friends)
+* Information( Avatar, Help, Invite, Ping, Word)
+* Moderation( Clear, Spam)
+* Random Number Generator
+* FreeGames( Steam and Epic games ), in the future it will be on all servers
 
-#### Moment:
 
-* **Using Moment 2.29.1**
+#### Event listeners
 
-```sh-session
-npm install moment --save
-```
+* Logger System with Colors in CLI
+* Command Handler
+* Event Handler
+* Error Handler
 
----
+**Will be on all servers in future:**
 
-#### Express:
+* Welcome and Goodbye modules, AutoRole and Members count channel
 
-* **Using Express 4.17.3**
-
-```sh-session
-npm install express
-```
 
 ---
 
