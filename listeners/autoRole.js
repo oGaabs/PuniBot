@@ -9,5 +9,5 @@ module.exports = async function autoRole(client) {
 
         const bots = guild.members.cache.filter(m => m.user.bot)
         bots.forEach(member => member.roles.add(botRole))
-    }, 50000)
+    }, 25000)
 }
