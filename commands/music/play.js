@@ -73,6 +73,9 @@ module.exports = {
         client.on('voiceStateUpdate', (oldState, newState) => {
             if (!oldState.channelId || newState.channelId || connection.state.status === 'disconnected' || connection.state.status === 'destroyed')
                 return
+            const qtdPeopleInChannel = voiceChannel.members.size
+            if (qtdPeopleInChannel !== 1) return
+
             try {
                 stopSong()
             }
@@ -116,8 +119,7 @@ module.exports = {
                     .setColor(client.colors['default'])
                     .setTitle('🎵 | Acabaram as músicas. Desconectando...')
                 message.channel.send({ embeds: [endEmbed] })
-                // return getVoiceConnection(messageGuild.id).disconnect()
-                return connection.destroy()
+                return stopSong()
             }
 
             playSong(connection, queueConstructor.songs[0])
@@ -126,6 +128,7 @@ module.exports = {
         async function stopSong() {
             connection.destroy()
             queueConstructor = {}
+            queue.delete(messageGuild.id)
         }
 
         async function getVideosFromLink(sourceVideo) {
