@@ -1,7 +1,6 @@
 const { Client, Collection } = require('discord.js')
-const { colors, logger } = require('./utils')
+const utils = require('./utils')
 const Fs = require('fs')
-
 
 module.exports = class PuniBot extends Client {
     constructor(options = {}) {
@@ -9,8 +8,7 @@ module.exports = class PuniBot extends Client {
 
         this.commands = new Collection()
         this.prefix = process.env.PREFIX.toLowerCase()
-        this.colors = colors
-        this.logger = logger
+        Object.assign(this, utils)
     }
 
     loginBot(token) {
