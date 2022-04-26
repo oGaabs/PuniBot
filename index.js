@@ -18,19 +18,23 @@ client.once('ready', async () => {
     const dmChannel = botOwner.dmChannel ?? await botOwner.createDM()
     const botOldMessages = await dmChannel.messages.fetch({ limit: 100 })
 
+    // Delete old messages of bot from owner DM
     botOldMessages.forEach(message => {
         if (message.author.id === client.user.id)
             message.delete()
     })
 
+    // Calculate the bot ping and send a message to owner via DM
     botOwner.send('Estou online 🤨👍').then(async startMessage => {
         const finalMessage = await botOwner.send('**Calculando...**')
         const botPing = finalMessage.createdTimestamp - startMessage.createdTimestamp
         const apiPing = Math.round(client.ws.ping)
 
+        // Advise owner via DM about the bot's ping
         botOwner.send(`Bot Latency: ${botPing} ms, API Latency: ${apiPing} ms`)
         finalMessage.delete()
 
+        // Print/Debug the bot startup status
         client.logger.warn('',`\n[${client.logger.getDate()}] PuniBOT is ready!`, true)
         client.logger.error('=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=','', true)
         client.logger.debug('Bot: ', client.tag, true)
@@ -42,4 +46,5 @@ client.once('ready', async () => {
     })
 })
 
+// Login to Discord with your app's token
 client.loginBot(process.env.TOKEN)
