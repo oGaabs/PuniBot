@@ -6,13 +6,15 @@ module.exports = {
     description: 'Desliga o Bot',
     execute: async (message, _args, client) => {
         const botOwner = client.botOwner
-        const permissionErrorEmbed = new MessageEmbed()
-            .setTitle('**Erro:**', true)
-            .setColor(client.colors['default'])
-            .addField('*Comando somente para o dono do Bot!*', '`OWNER_ONLY`', true)
-            .setDescription('Missing Permissions')
-            .setFooter(client.getFooter(message.guild))
-            .setTimestamp()
+
+        const permissionErrorEmbed = await client.defaultEmbed.getPermissionError(
+            '**Comando somente para o dono do Bot!*',
+            '`OWNER_ONLY`'
+        )
+
+        permissionErrorEmbed.setColor(client.colors['default'])
+        permissionErrorEmbed.setFooter(client.getFooter(message.guild))
+
         if (message.author.id !== botOwner.id) return message.channel.send({ embeds: [permissionErrorEmbed] })
 
         const stopEmbed = new MessageEmbed()
@@ -22,6 +24,6 @@ module.exports = {
 
         client.logger.error('[DEBUG] ::', 'Desligamento solicitado pelo Dono\n')
         client.destroy()
-        process.exit()
+        process.exit(0)
     }
 }
