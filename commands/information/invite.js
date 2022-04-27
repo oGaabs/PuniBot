@@ -6,13 +6,15 @@ module.exports = {
     description: 'Gera um convite!',
     execute: async (message, _args, client) => {
         const user = message.member
-        const permissionErrorEmbed = new MessageEmbed()
-            .setTitle('**Erro:**', true)
-            .setColor(client.colors['default'])
-            .addField('*Verifique se você possui a permissão:*', '`CREATE_INSTANT_INVITE`', true)
-            .setDescription('Missing Permissions')
-            .setFooter(client.getFooter(message.guild))
-            .setTimestamp()
+
+        const permissionErrorEmbed = await client.defaultEmbed.getPermissionError(
+            '*Verifique se você ou o bot possui a permissão:*',
+            '`CREATE_INSTANT_INVITE`'
+        )
+
+        permissionErrorEmbed.setColor(client.colors['default'])
+        permissionErrorEmbed.setFooter(client.getFooter(message.guild))
+
         if (!user.permissions.has('CREATE_INSTANT_INVITE'))
             return message.channel.send({ embeds: [permissionErrorEmbed] })
 

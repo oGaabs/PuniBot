@@ -9,13 +9,14 @@ module.exports = {
     execute: async (message, args, client) => {
         if (!args[0]) return message.reply('Insira a quantidade de mensagens que você quer limpar!')
 
-        const permissionErrorEmbed = new MessageEmbed()
-            .setTitle('**Erro:**', true)
-            .setColor(client.colors['default'])
-            .addField('*Verifique se você possui a permissão:*', '`MANAGE_MESSAGES`', true)
-            .setDescription('Missing Permissions')
-            .setFooter(client.getFooter(message.guild))
-            .setTimestamp()
+        const permissionErrorEmbed = await client.defaultEmbed.getPermissionError(
+            '*Verifique se você ou o bot possui a permissão:*',
+            '`MANAGE_MESSAGES`'
+        )
+
+        permissionErrorEmbed.setColor(client.colors['default'])
+        permissionErrorEmbed.setFooter(client.getFooter(message.guild))
+
         if (!message.member.permissions.has('MANAGE_MESSAGES'))
             return message.channel.send({ embeds: [permissionErrorEmbed] })
 

@@ -10,13 +10,14 @@ module.exports = {
         if (isNaN(args[0])) return message.reply('Insira apenas números!')
         if (args[0] > 30 || args[0] < 1) return message.reply('So é possível spammar de 1 a 30 mensagens!')
 
-        const permissionErrorEmbed = new MessageEmbed()
-            .setTitle('**Erro:**', true)
-            .setColor(client.colors['default'])
-            .addField('*Verifique se você possui a permissão:*', '`ADMINISTRATOR`', true)
-            .setDescription('Missing Permissions')
-            .setFooter(client.getFooter(message.guild))
-            .setTimestamp()
+        const permissionErrorEmbed = await client.defaultEmbed.getPermissionError(
+            '*Verifique se você ou o bot possui a permissão:*',
+            '`ADMINISTRATOR`'
+        )
+
+        permissionErrorEmbed.setColor(client.colors['default'])
+        permissionErrorEmbed.setFooter(client.getFooter(message.guild))
+
         if (!message.member.permissions.has('ADMINISTRATOR'))
             return message.channel.send({ embeds: [permissionErrorEmbed] })
         let spamCount = 0
