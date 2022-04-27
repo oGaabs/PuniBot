@@ -21,7 +21,7 @@ module.exports = {
             .setTitle('Resetando...')
         await message.channel.send({ embeds: [resetEmbed] })
 
-        client.logger.warn('[DEBUG] ::', 'Restart solicitado pelo Dono\n')
+        client.logger.warn('[DEBUG] ::', 'Restart solicitado pelo Dono\n', true)
         client.restartBot()
     }
 }

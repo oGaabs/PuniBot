@@ -35,14 +35,14 @@ client.once('ready', async () => {
         finalMessage.delete()
 
         // Print/Debug the bot startup status
-        client.logger.warn('',`\n[${client.logger.getDate()}] PuniBOT is ready!`, true)
-        client.logger.error('=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=','', true)
-        client.logger.debug('Bot: ', client.tag, true)
-        client.logger.debug('Status: ', 'Initialized', true)
-        client.logger.debug('Memory: ', `${Math.round(process.memoryUsage().rss / 1024 / 1024 * 100) / 100}/1024 MB`, true)
-        client.logger.debug('Bot Latency: ',`${botPing} ms`, true)
-        client.logger.debug('API Latency: ',`${apiPing} ms`, true)
-        client.logger.error('=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=','\n', true)
+        client.logger.warn('',`\n[${client.logger.getDate()}] PuniBOT is ready!`)
+        client.logger.alert('=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=','')
+        client.logger.debug('Bot: ', client.tag)
+        client.logger.debug('Status: ', 'Initialized')
+        client.logger.debug('Memory: ', `${Math.round(process.memoryUsage().rss / 1024 / 1024 * 100) / 100}/1024 MB`)
+        client.logger.debug('Bot Latency: ',`${botPing} ms`)
+        client.logger.debug('API Latency: ',`${apiPing} ms`)
+        client.logger.alert('=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=','\n')
     })
 })
 

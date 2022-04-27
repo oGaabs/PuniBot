@@ -1,6 +1,6 @@
 module.exports = {
     name: 'fakePermError',
-    aliases: ['fakepermissionerr','getfakepermissionembed', 'permembed'],
+    aliases: ['fakepermissionerr','getfakepermissionembed', 'permerr','permembed'],
     description: 'Gerar erro de permissão!',
     execute: async (message, _args, client) => {
         const botOwner = client.botOwner
@@ -14,7 +14,7 @@ module.exports = {
 
         if (message.author.id !== botOwner.id) return message.channel.send({ embeds: [permissionErrorEmbed] })
 
-        client.logger.warn('[DEBUG] ::', 'Erro de permissão solicitado pelo Dono\n')
+        client.logger.warn('[DEBUG] ::', 'Erro de permissão solicitado pelo Dono\n', true)
         message.channel.send({ embeds: [permissionErrorEmbed] })
     }
 }

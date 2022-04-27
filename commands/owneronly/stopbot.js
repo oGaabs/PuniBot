@@ -22,7 +22,7 @@ module.exports = {
             .setTitle('Desligando...')
         await message.channel.send({ embeds: [stopEmbed] })
 
-        client.logger.error('[DEBUG] ::', 'Desligamento solicitado pelo Dono\n')
+        client.logger.error('[DEBUG] ::', 'Desligamento solicitado pelo Dono\n', true)
         client.destroy()
         process.exit(0)
     }

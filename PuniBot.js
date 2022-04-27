@@ -13,8 +13,8 @@ module.exports = class PuniBot extends Client {
 
     loginBot(token) {
         this.login(token)
-            .then(() => this.logger.warn('[DEBUG] ::', `Logado como ${this.user.tag}.\n`))
-            .catch(err => this.logger.error('[FAIL] ::', 'Falha ao iniciar o bot : ' + err))
+            .then(() => this.logger.warn('[DEBUG] ::', `Logado como ${this.user.tag}.\n`, true))
+            .catch(err => this.logger.error('[FAIL] ::', 'Falha ao iniciar o bot : ' + err, true))
     }
 
     restartBot() {
@@ -37,12 +37,12 @@ module.exports = class PuniBot extends Client {
                         const command = require(filePath)
                         const commandName = file.replace(/.js/g, '').toLowerCase()
                         this.logger.debug('[DEBUG] ::',
-                            ` (${++index}/${filesLength}) Loaded ${file} command.`, true)
+                            ` (${++index}/${filesLength}) Loaded ${file} command.`)
                         return this.commands.set(commandName, command)
                     }
                     catch (err) {
                         return this.logger.error('[FAIL] ::',
-                            `(${++index}) Fail when loading ${file} command.`, err)
+                            `(${++index}) Fail when loading ${file} command.`, false, err)
                     }
                 }
                 if (Fs.lstatSync(filePath).isDirectory()){
@@ -64,10 +64,16 @@ module.exports = class PuniBot extends Client {
             try {
                 const filePath = path + '/' + file
                 if (file.endsWith('.js')) {
-                    const Listener = require(filePath)
-                    Listener(this)
-                    return this.logger.debug('[DEBUG] ::',
-                        ` (${++index}/${filesLength}) Loaded ${file} event.`, true)
+                    try {
+                        const Listener = require(filePath)
+                        Listener(this)
+                        return this.logger.debug('[DEBUG] ::',
+                            ` (${++index}/${filesLength}) Loaded ${file} event.`)
+                    }
+                    catch (err) {
+                        return this.logger.error('[FAIL] ::',
+                            `(${++index}) Fail when loading ${file} event.`, false, err)
+                    }
                 }
                 if (Fs.lstatSync(filePath).isDirectory())
                     this.initListeners(filePath)

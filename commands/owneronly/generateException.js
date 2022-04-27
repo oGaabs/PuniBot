@@ -22,7 +22,7 @@ module.exports = {
             .setTitle('Gerando Exception...')
         await message.channel.send({ embeds: [resetEmbed] })
 
-        client.logger.warn('[DEBUG] ::', 'Erro solicitado pelo Dono\n')
+        client.logger.warn('[DEBUG] ::', 'Erro solicitado pelo Dono\n', true)
         message.channel.send('')
     }
 }
