@@ -41,6 +41,7 @@ module.exports = class PuniBot extends Client {
                         return this.commands.set(commandName, command)
                     }
                     catch (err) {
+                        console.log(err)
                         return this.logger.error('[FAIL] ::',
                             `(${++index}) Fail when loading ${file} command.`, false, err)
                     }
