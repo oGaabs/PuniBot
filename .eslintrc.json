@@ -27,7 +27,7 @@
         "allowTemplateLiterals": 0,
         "no-unused-vars": [2, {"vars": "all", "args": "all", "argsIgnorePattern": "^_"}],
         "semi": [
-            "error",
+            "warn",
             "never"
         ]
     }
