@@ -1,9 +1,9 @@
 const { MessageEmbed } = require('discord.js')
 
 module.exports = {
-    name: 'bassboost',
-    aliases: ['batidao', 'bass'],
-    description: 'Bassboost filter',
+    name: 'bassboosthigh',
+    aliases: 'bsh',
+    description: 'Bassboost_High filter',
     execute: async (message, _args, client) => {
         const voiceChannel = message.member.voice.channel
         const queue = client.player.getQueue(message.guild)
@@ -14,13 +14,13 @@ module.exports = {
         // Setar um filtro de bassboost na música atual
         // e enviar uma mensagem de confirmação com ON/OFF
         await queue.setFilters({
-            bassboost: !queue.getFiltersEnabled().includes('bassboost'),
-            normalizer2: !queue.getFiltersEnabled().includes('bassboost')
+            'bassboosthigh': !queue.getFiltersEnabled().includes('bassboosthigh'),
+            normalizer2: !queue.getFiltersEnabled().includes('bassboosthigh')
         })
 
         const filterEmbed = new MessageEmbed()
             .setColor(client.colors['default'])
-            .setTitle(`🎵 | Bassboost: ${queue.getFiltersEnabled().includes('bassboost') ? 'ON' : 'OFF'}`)
+            .setTitle(`🎵 | Bassboost: ${queue.getFiltersEnabled().includes('bassboosthigh') ? 'ON' : 'OFF'}`)
 
         setTimeout(() => {
             return message.channel.send({ embeds: [filterEmbed] })
