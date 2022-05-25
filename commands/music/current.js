@@ -1,28 +1,30 @@
-const { MessageEmbed } = require('discord.js')
+const { MessageActionRow, MessageButton, MessageEmbed } = require('discord.js')
 
 module.exports = {
     name: 'current',
     aliases: ['atual', 'playing', 'song', 'music', 'tocando', 'link', 'nowplaying'],
     description: 'Música atual',
     execute: async (message, _args, client) => {
-        const { queue } = message.client
-        if (!queue) return message.reply('Não ha nenhuma musica sendo tocada!')
+        const voiceChannel = message.member.voice.channel
+        const queue = client.player?.getQueue(message.guild)
 
-        const serverQueue = queue.get(message.guild.id)
-        if (!serverQueue) return message.reply('Não ha nenhuma musica sendo tocada!')
+        if (!queue || !queue.playing) return message.reply('Não há nenhuma musica sendo tocada!')
+        if (voiceChannel != queue.metadata.channel) return message.reply('Você precisa entrar no mesmo canal de voz!')
 
-        const currentlySong = serverQueue.songs[0]
-        const songUrl = currentlySong.url
+        // Recupera a atual música que está tocando
+        // e envia uma mensagem com o seu titulo, thumbnail, link e quem requisitou ela
+
+        const currentlyTrack = queue.current
+        const songUrl = currentlyTrack.url.replace('https://www.youtube.com/watch?v=', 'https://youtu.be/')
 
         const songEmbed = new MessageEmbed()
             .setColor(client.colors['default'])
             .setTitle('Now playing')
-            .setThumbnail(currentlySong.thumbnail)
-            .setDescription(`**[${currentlySong.title}](${songUrl})**`)
+            .setDescription(`**[${currentlyTrack.title}](${songUrl})**`)
             .addFields(
                 {
                     name: '**Requisitada pelo(a)**',
-                    value: currentlySong.requestBy,
+                    value: currentlyTrack.requestedBy.toString() || 'Não informado',
                     inline: true
                 },
                 {
@@ -31,6 +33,19 @@ module.exports = {
                     inline: true
                 }
             )
-        message.channel.send({ embeds: [songEmbed] })
+
+        // Uma row que contem o link da musica e ações que podem ser executas
+        // será enviada junto com a mensagem de música atual
+        // As ações serão implementadas futuramente
+        const row = new MessageActionRow()
+            .addComponents([
+                new MessageButton()
+                    .setEmoji('📀')
+                    .setLabel('LINK')
+                    .setStyle('LINK')
+                    .setURL(songUrl),
+            ])
+
+        message.channel.send({ ephemeral: true, embeds: [songEmbed], components: [row] })
     }
 }

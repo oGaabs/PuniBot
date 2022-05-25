@@ -1,22 +1,32 @@
 const { MessageEmbed } = require('discord.js')
+const { QueueRepeatMode } = require('discord-player')
 
 module.exports = {
     name: 'loop',
     aliases: ['autoplay','semparar', 'dontstop'],
     description: 'Loop na playlist',
     execute: async (message, _args, client) => {
-        const { queue } = message.client
-        if (!queue) return message.reply('Não ha nenhuma musica sendo tocada!')
+        const voiceChannel = message.member.voice.channel
+        const queue = client.player.getQueue(message.guild)
 
-        const serverQueue = queue.get(message.guild.id)
-        if (!serverQueue) return message.reply('Não ha nenhuma musica sendo tocada!')
+        if (!queue || !queue.playing) return message.reply('Não há nenhuma musica sendo tocada!')
+        if (voiceChannel != queue.metadata.channel) return message.reply('Você precisa entrar no mesmo canal de voz!')
 
-        const status = !serverQueue.autoPlay
-        serverQueue.autoPlay = status
+        // Alterna a opção de repetir a playlist
+        let autoPlay
+        if (queue.repeatMode === QueueRepeatMode.QUEUE){
+            queue.setRepeatMode(QueueRepeatMode.OFF)
+            autoPlay = false
+        }
+        else{
+            queue.setRepeatMode(QueueRepeatMode.QUEUE)
+            autoPlay = true
+        }
 
+        // Envia uma mensagem de confirmação
         const autoplayEmbed = new MessageEmbed()
             .setColor(client.colors['default'])
-            .setTitle(`🎵 | AutoPlay: ${status ? 'ON' : 'OFF'}`)
+            .setTitle(`🎵 | AutoPlay: ${autoPlay ? 'ON' : 'OFF'}`)
         message.channel.send({ embeds: [autoplayEmbed] })
     }
 }

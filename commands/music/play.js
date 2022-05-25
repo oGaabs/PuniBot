@@ -1,206 +1,155 @@
-
-const youtube = require('ytdl-core')
-const youtubeSearch = require('ytsr')
-const youtubePlaylist = require('ytpl')
 const { MessageEmbed } = require('discord.js')
-const { createAudioPlayer, createAudioResource, joinVoiceChannel } = require('@discordjs/voice')
+const { Player } = require('discord-player')
+let player
 
-
-const queue = new Map() // {message.guild.id, queue_constructor}, Recebe um object com o id da guild e o queue
 module.exports = {
     name: 'play',
     aliases: ['tocar'],
     description: 'Tocar uma música',
     args: 'Link do video',
     execute: async (message, args, client) => {
-        const { channel: voiceChannel } = message.member.voice
+        if (!args[0])
+            return message.reply('Você precisa disponibilizar um link do youtube. Ex: !p play https://www.youtube.com/watch?v=dQw4w9WgXcQ')
+
+        const voiceChannel = message.member.voice.channel
         if (!voiceChannel) return message.reply('Você precisa entrar em um canal de texto')
 
         const channelPermissions = voiceChannel.permissionsFor(message.client.user)
         if (!channelPermissions.has('CONNECT')) return message.reply('Estou sem permissão para conectar ao canal. (CONNECT)')
         if (!channelPermissions.has('SPEAK')) return message.reply('Estou sem permissão para falar no canal. (SPEAK)')
 
-        if (!args[0]) return message.reply('Você precisa disponibilizar um link do youtube. Ex: !p play https://www.youtube.com/watch?v=dQw4w9WgXcQ')
+        // Cria uma novo player, caso não exista, setando suas configurações e listeners
+        if (!client.player) {
+            player = new Player(client, {
+                leaveOnEnd: true,
+                leaveOnStop: true,
+                leaveOnEmpty: true,
+                leaveOnEmptyCooldown: 1000,
+                autoSelfDeaf: true,
+                initialVolume: 50
+            })
+            client.player = player
+
+            player.on('queueEnd', queue => {
+                onPlaylistEnd(message.channel, queue)
+            })
+            player.on('trackStart', (_queue, track) => {
+                if (queue.repeatMode !== 0) return
+                onNewTrack(message.channel, track)
+            })
+            player.on('error', (_queue, _err) => {
+                /*client.player = null
+                queue.destroy()
+                console.log(err)*/
+            })
+            player.on('connectionError',(_queue, _err) => {
+                //console.log(err)
+            })
+        }
 
         const messageGuild = message.guild
-        const serverQueue = queue.get(messageGuild.id)
-        client.queue = queue
+        const song = args.join(' ')
 
-        const soundArray = await getVideosFromLink(args.join(' '))
-        if (soundArray === null) return message.reply('Video não foi encontrado, certifique-se que é um link do Youtube valido!')
+        // Procura por uma música, usando um titulo ou um link
+        // Funciona com playlist (youtube ou spotify)
+        const searchResult = await client.player.search(song, {
+            requestedBy: message.author
+        }).then(s => s).catch(() => { })
 
-        if (serverQueue && messageGuild.me.voice.channel) return addSoundToQueue(soundArray, serverQueue)
+        if (!searchResult || !searchResult.tracks.length)
+            return message.reply('Video não foi encontrado, certifique-se que é um link do Youtube/Spotify valido\nCaso o erro persista, a API que utilizamos pode estar fora do ar!')
 
-        const player = createAudioPlayer()
-        let queueConstructor = {
-            textChannel: message.channel,
-            voiceChannel,
-            connection: null,
-            songs: [],
-            player,
-            autoPlay: false
-        }
+        const guildQueue = client.player.getQueue(messageGuild)
+        let queue
 
-        queue.set(messageGuild.id, queueConstructor)
-        addSoundToQueue(soundArray, queueConstructor)
-
-        let connection
-        try {
-            connection = joinVoiceChannel({
-                channelId: voiceChannel.id,
-                guildId: messageGuild.id,
-                adapterCreator: messageGuild.voiceAdapterCreator
+        // Se não existir uma fila de reprodução, cria uma nova
+        if (!guildQueue) {
+            queue = await player.createQueue(messageGuild, {
+                metadata: {
+                    channel: voiceChannel
+                }
             })
-            queueConstructor.connection = connection
         }
-        catch (error) {
-            queue.delete(messageGuild.id)
-            return message.reply('Não foi possível entrar no canal de voz!')
+        else {
+            queue = guildQueue
         }
 
-        playSong(connection, queueConstructor.songs[0])
+        playSong(searchResult, queue, voiceChannel)
 
-        player.on('idle', () => {
-            nextSong(connection)
-        })
-        player.on('stop', () => {
-            stopSong()
-        })
-        player.on('error', err => {
-            stopSong()
-            console.log(err)
-        })
-        client.on('voiceStateUpdate', (oldState, newState) => {
-            if (!oldState.channelId || newState.channelId || connection.state.status === 'disconnected' || connection.state.status === 'destroyed')
-                return
-            const qtdPeopleInChannel = voiceChannel.members.size
-            if (qtdPeopleInChannel !== 1) return
-
+        async function playSong(searchResult, queue, voiceChannel) {
+            // Verifica se uma conexão já foi estabelecida
             try {
-                stopSong()
+                if (!queue.connection)
+                    await queue.connect(voiceChannel)
             }
-            catch (err) {console.log(err)}
-        })
-
-        async function playSong(connection, { stream, title, url, thumbnail, requestBy}) {
-            const youtubeOptions = { filter: 'audioonly', type: 'opus', quality: 'highestaudio' , highWaterMark: 1 << 25}
-            const audio = youtube(stream, youtubeOptions)
-
-            const resource = createAudioResource(audio, {highWaterMark: 1})
-            await connection.subscribe(player, {highWaterMark: 1})
-            player.play(resource)
-
-            const songEmbed = new MessageEmbed()
-                .setColor(client.colors['default'])
-                .setTitle('Now playing')
-                .setThumbnail(thumbnail)
-                .setDescription(`**[${title}](${url})**`)
-                .addFields(
-                    {
-                        name: '**Requisitada pelo(a)**',
-                        value: requestBy,
-                        inline: true
-                    },
-                    {
-                        name: 'Link',
-                        value: `**[${url}](${url})**`,
-                        inline: true
-                    }
-                )
-            message.channel.send({ embeds: [songEmbed] })
-        }
-
-        async function nextSong(connection) {
-            const currentlySong = queueConstructor.songs.shift()
-            if (queueConstructor.autoPlay)
-                queueConstructor.songs.push(currentlySong)
-            if (!queueConstructor.songs.length) {
-                const endEmbed = new MessageEmbed()
-                    .setColor(client.colors['default'])
-                    .setTitle('🎵 | Acabaram as músicas. Desconectando...')
-                message.channel.send({ embeds: [endEmbed] })
-                return stopSong()
+            catch {
+                queue.destroy()
+                return message.reply('Não foi possível entrar no canal de voz!')
             }
-
-            playSong(connection, queueConstructor.songs[0])
-        }
-
-        async function stopSong() {
-            connection.destroy()
-            queueConstructor = {}
-            queue.delete(messageGuild.id)
-        }
-
-        async function getVideosFromLink(sourceVideo) {
-            let soundArray = [{}]
-            const playlistRegex = /^https?:\/\/(www.youtube.com|youtube.com)\/playlist(.*)$/
 
             const playEmbed = new MessageEmbed()
                 .setColor(client.colors['default'])
 
-
-            if (sourceVideo.match(playlistRegex)) {
-                let playlist = await youtubePlaylist(sourceVideo, { limit: 100 }).then(res => res.items)
-
-                for (let song of playlist) {
-                    try {
-                        song = getInfoFromLink(song.url, true)
-                        soundArray.push(song)
-                    }
-                    catch (err) { continue }
-                }
+            // Adiciona uma playlist, caso não seja uma playlist, adiciona apenas uma música
+            if (searchResult.playlist) {
+                const playlist = searchResult.tracks
+                queue.addTracks(playlist)
 
                 playEmbed.setTitle('Adicionando a playlist... aguarde!')
+                playEmbed.setDescription(`${playlist.length} músicas serão adicionadas a playlist.`)
                 const playMessage = await message.channel.send({ embeds: [playEmbed] })
 
-                soundArray = await Promise.all(soundArray)
                 playEmbed.setTitle('🎵 | Playlist adicionada com sucesso!')
+                playEmbed.description = null
+
                 playMessage.edit({ embeds: [playEmbed] })
-                return soundArray
             }
+            else {
+                const track = searchResult.tracks[0]
+                queue.addTrack(track)
 
-            if (youtube.validateURL(sourceVideo)) {
-                const song = await getInfoFromLink(sourceVideo)
-                soundArray.push(song)
-                return soundArray
-            }
-            const filterVideos = await youtubeSearch.getFilters(sourceVideo).then(
-                res => res.get('Type').get('Video')
-            )
-            const searchTitle = await youtubeSearch(filterVideos.url, { limit: 5 })
-            if (searchTitle) {
-                const song = await getInfoFromLink(searchTitle.items[0].url)
-                soundArray.push(song)
-                return soundArray
-            }
-            return null
-        }
+                playEmbed.setTitle(`🎵 | **${track.title}** adicionado a playlist!`)
 
-        function addSoundToQueue(soundArray, queueToAdd) {
-            for (const sound of soundArray) {
-                if (Object.keys(sound).length === 0) continue
-                queueToAdd.songs.push(sound)
-            }
-        }
-
-        async function getInfoFromLink(videoLink, isPlaylist) {
-            const songInfo = await youtube.getBasicInfo(videoLink).then(info => info.videoDetails)
-            const shortUrl = 'https://youtu.be/'+ songInfo.videoId
-            const thumbnail = songInfo.thumbnails.pop()
-
-            const song = {
-                stream: videoLink,
-                title: songInfo.title, url: shortUrl,
-                thumbnail: thumbnail.url, requestBy: message.author.toString()
-            }
-
-            if (!isPlaylist){
-                const playEmbed = new MessageEmbed()
-                    .setColor(client.colors['default'])
-                    .setTitle(`🎵 | **${song.title}** adicionado a playlist!`)
                 message.channel.send({ embeds: [playEmbed] })
             }
-            return song
+
+            // Toca a musica imediatamente, caso não esteja tocando
+            if (!queue.playing) await queue.play()
+        }
+
+
+        // Enviar uma nova mensagem com o link da música e suas especificações
+        async function onNewTrack(channel, currentlySong) {
+            const shortUrl = currentlySong.url.replace('https://www.youtube.com/watch?v=', 'https://youtu.be/')
+            const songEmbed = new MessageEmbed()
+                .setColor(client.colors['default'])
+                .setTitle('Now playing')
+                .setThumbnail(currentlySong.thumbnail)
+                .setDescription(`**[${currentlySong.title}](${currentlySong.url})**`)
+                .addFields(
+                    {
+                        name: '**Requisitada pelo(a)**',
+                        value: currentlySong.requestedBy.toString() || 'Não informado',
+                        inline: true
+                    },
+                    {
+                        name: 'Link',
+                        value: `**[${shortUrl}](${shortUrl})**`,
+                        inline: true
+                    }
+                )
+            channel.send({ embeds: [songEmbed] })
+        }
+
+        // Enviar uma mensagem quando a playlist terminar
+        // e desconectar do canal de voz
+        function onPlaylistEnd(channel, queue) {
+            const endEmbed = new MessageEmbed()
+                .setColor(client.colors['default'])
+                .setTitle('🎵 | Acabaram as músicas. Desconectando...')
+            channel.send({ embeds: [endEmbed] })
+
+            queue.destroy()
         }
     }
 }

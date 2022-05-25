@@ -1,17 +1,24 @@
+const { MessageEmbed } = require('discord.js')
+
 module.exports = {
     name: 'stop',
-    aliases: ['parar','clear','limpar','desconectar','disconnect'],
+    aliases: ['parar', 'clear', 'limpar', 'desconectar', 'disconnect'],
     description: 'Parar playlist',
-    execute: async (message, _args, _client) => {
+    execute: async (message, _args, client) => {
         const voiceChannel = message.member.voice.channel
-        if (!voiceChannel) return message.reply('Você precisa entrar em um canal de texto!')
+        const queue = client.player.getQueue(message.guild)
 
-        const queue = message.client.queue
-        if (!queue) return message.reply('Não ha nenhuma musica sendo tocada!')
+        if (!queue || !queue.playing) return message.reply('Não há nenhuma musica sendo tocada!')
+        if (voiceChannel != queue.metadata.channel) return message.reply('Você precisa entrar no mesmo canal de voz!')
 
-        const serverQueue = queue.get(message.guild.id)
-        if (!serverQueue) return message.reply('Não ha nenhuma musica sendo tocada!')
-        serverQueue.songs = []
-        serverQueue.player.emit('stop')
+        // Para a reprodução atual, desconectando o bot do canal de voz
+        // e envia uma mensagem de confirmação
+        queue.destroy()
+
+        const playEmbed = new MessageEmbed()
+            .setColor(client.colors['default'])
+            .setTitle('🛑 | Playlist parada!')
+
+        await message.channel.send({ embeds: [playEmbed] })
     }
 }

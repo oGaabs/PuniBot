@@ -1,16 +1,25 @@
+const { MessageEmbed } = require('discord.js')
+
 module.exports = {
     name: 'skip',
     aliases: ['pular'],
     description: 'Pular música',
-    execute: async (message, _args, _client) => {
+    execute: async (message, _args, client) => {
         const voiceChannel = message.member.voice.channel
-        if (!voiceChannel) return message.reply('Você precisa entrar em um canal de texto!')
+        const queue = client.player.getQueue(message.guild)
 
-        const { queue } = message.client
-        if (!queue) return message.reply('Não ha nenhuma musica sendo tocada!')
+        if (!queue || !queue.playing) return message.reply('Não há nenhuma musica sendo tocada!')
+        if (voiceChannel != queue.metadata.channel) return message.reply('Você precisa entrar no mesmo canal de voz!')
 
-        const serverQueue = queue.get(message.guild.id)
-        if (!serverQueue) return message.reply('Não ha nenhuma musica sendo tocada!')
-        serverQueue.player.emit('idle')
+        // Pula a música atual e em seguida
+        // envia uma mensagem de confirmação
+        const currentTrack = queue.current
+        queue.skip()
+
+        const playEmbed = new MessageEmbed()
+            .setColor(client.colors['default'])
+            .setTitle(`✅ | Musica skipada: ${currentTrack}`)
+
+        message.channel.send({ embeds: [playEmbed] })
     }
 }
