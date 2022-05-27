@@ -33,9 +33,9 @@ module.exports = {
             player.on('queueEnd', queue => {
                 onPlaylistEnd(message.channel, queue)
             })
-            player.on('trackStart', (_queue, track) => {
+            player.on('trackStart', (queue, track) => {
                 if (queue.repeatMode !== 0) return
-                onNewTrack(message.channel, track)
+                onNewTrack(queue.metadata.textChannel, track)
             })
             player.on('error', (_queue, _err) => {
                 /*client.player = null
@@ -66,6 +66,7 @@ module.exports = {
         if (!guildQueue) {
             queue = await player.createQueue(messageGuild, {
                 metadata: {
+                    textChannel: message.channel,
                     channel: voiceChannel
                 }
             })
