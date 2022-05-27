@@ -2,7 +2,7 @@ module.exports = {
     name: 'fake',
     aliases: ['fakear', 'troll'],
     description: 'Fakear um usuario e mensagem!',
-    args: '(Usuario) (Mensagem)',
+    args: '(Usuario) (Canal) (Mensagem) ',
     execute: async (message, args, client) => {
         const permissionErrorEmbed = await client.defaultEmbed.getPermissionError(
             '*Verifique se você ou o bot possui a permissão:*',
@@ -17,11 +17,13 @@ module.exports = {
 
         const userToFake = message.mentions.users.first()
         if (!userToFake) return message.channel.send('Você precisa mencionar um usuário!')
-        const messageToFake = args.slice(1).join(' ')
 
+        const channelToSend = message.mentions.channels.first() ?? message.channel
+
+        const messageToFake = args.slice(2).join(' ')
         if (messageToFake.length < 1) return message.channel.send('Você precisa digitar uma mensagem!')
 
-        message.channel.createWebhook(userToFake.username, { avatar: userToFake.displayAvatarURL({ format: 'png' }) }).then(async webhook => {
+        channelToSend.createWebhook(userToFake.username, { avatar: userToFake.displayAvatarURL({ format: 'png' }) }).then(async webhook => {
             webhook.send(messageToFake)
             message.delete()
         })
