@@ -4,8 +4,6 @@ const nodeFetch = require('node-fetch')
 //
 
 module.exports = async function freeGamesReddit(client) {
-    if (client != 1)
-        return
     const freeGameChannel = client.channels.cache.get('937164018282557470')
     const sentGames = []
 
