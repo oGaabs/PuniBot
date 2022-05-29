@@ -6,8 +6,11 @@ module.exports = class PuniBot extends Client {
     constructor(options = {}) {
         super(options)
 
-        this.commands = new Collection()
         this.prefix = process.env.PREFIX.toLowerCase()
+
+        this.commands = new Collection()
+        this.categories = []
+
         Object.assign(this, utils)
     }
 
@@ -27,18 +30,22 @@ module.exports = class PuniBot extends Client {
     }
 
     initCommands(path) {
-        const files =  Fs.readdirSync(path)
+        const files = Fs.readdirSync(path)
         const filesLength = files.length
-        Fs.readdirSync(path).forEach( (file, index) => {
+        Fs.readdirSync(path).forEach((file, index) => {
             try {
                 const filePath = path + '/' + file
                 if (file.endsWith('.js')) {
                     try {
                         const command = require(filePath)
                         const commandName = file.replace(/.js/g, '').toLowerCase()
-                        this.logger.debug('[DEBUG] ::',
+
+                        this.commands.set(commandName, command)
+                        if (this.categories.indexOf(command.category) == -1 && command.category !== 'ownerOnly')
+                            this.categories.push(command.category)
+
+                        return this.logger.debug('[DEBUG] ::',
                             ` (${++index}/${filesLength}) Loaded ${file} command.`)
-                        return this.commands.set(commandName, command)
                     }
                     catch (err) {
                         console.log(err)
@@ -46,7 +53,7 @@ module.exports = class PuniBot extends Client {
                             `(${++index}) Fail when loading ${file} command.`, false, err)
                     }
                 }
-                if (Fs.lstatSync(filePath).isDirectory()){
+                if (Fs.lstatSync(filePath).isDirectory()) {
                     console.log(`\n[${this.logger.getDate()}] Directory: ${file}`)
                     this.initCommands(filePath)
                 }
@@ -58,10 +65,10 @@ module.exports = class PuniBot extends Client {
     }
 
     initListeners(path) {
-        const files =  Fs.readdirSync(path)
+        const files = Fs.readdirSync(path)
         const filesLength = files.length
         console.log(`\n[${this.logger.getDate()}] Directory: ${path.split('/').pop()}`)
-        files.forEach((file, index)  => {
+        files.forEach((file, index) => {
             try {
                 const filePath = path + '/' + file
                 if (file.endsWith('.js')) {
