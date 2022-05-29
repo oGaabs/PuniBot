@@ -2,8 +2,9 @@ const { MessageEmbed } = require('discord.js')
 
 module.exports = {
     name: 'fight',
-    aliases: ['batalhar', 'batalha', 'lutar', 'luta','desafio'],
+    aliases: ['batalhar', 'batalha', 'lutar', 'luta', 'desafio'],
     description: 'Lutar contra outro usuário!',
+    category: 'entretenimento',
     args: '@(Pessoa1) @(Pessoa2)',
     execute: async (message, _args, client) => {
         const users = message.mentions.users.first(2)
@@ -50,5 +51,5 @@ function getResultadoDaBatalha(vencedor, perdedor) {
     const frasePerdedor = frasesPerdedor[Math.floor(Math.random() * frasesPerdedor.length)]
 
     return (`${vencedor}\n ${fraseVencedor}\n` +
-            `${perdedor}\n ${frasePerdedor}\n`)
+        `${perdedor}\n ${frasePerdedor}\n`)
 }

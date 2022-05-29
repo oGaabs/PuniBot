@@ -1,10 +1,9 @@
-const { MessageEmbed } = require('discord.js')
-
 module.exports = {
     name: 'clear',
     aliases: ['limpar', 'excluir', 'deletar',
         'del', 'cl'],
     description: 'Limpa as mensagens!',
+    category: 'moderação',
     args: '(qtdMensagens)',
     execute: async (message, args, client) => {
         if (!args[0]) return message.reply('Insira a quantidade de mensagens que você quer limpar!')

@@ -2,8 +2,9 @@ const { MessageEmbed } = require('discord.js')
 
 module.exports = {
     name: 'vaporwave',
-    aliases: ['vapor','wave'],
+    aliases: ['vapor', 'wave'],
     description: '8D filter',
+    category: 'musica',
     execute: async (message, _args, client) => {
         const voiceChannel = message.member.voice.channel
         const queue = client.player.getQueue(message.guild)

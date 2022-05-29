@@ -4,6 +4,7 @@ module.exports = {
     name: 'stopbot',
     aliases: ['pararbot','desligar'],
     description: 'Desliga o Bot',
+    category: 'ownerOnly',
     execute: async (message, _args, client) => {
         const botOwner = client.botOwner
 

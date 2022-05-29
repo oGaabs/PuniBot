@@ -4,9 +4,10 @@ let player
 
 module.exports = {
     name: 'play',
-    aliases: ['tocar'],
+    aliases: ['tocar', 'youtube', 'spotify', 'soundcloud'],
     description: 'Tocar uma música',
     args: 'Link do video',
+    category: 'musica',
     execute: async (message, args, client) => {
         if (!args[0])
             return message.reply('Você precisa disponibilizar um link do youtube. Ex: !p play https://www.youtube.com/watch?v=dQw4w9WgXcQ')
@@ -30,20 +31,25 @@ module.exports = {
             })
             client.player = player
 
-            player.on('queueEnd', queue => {
-                onPlaylistEnd(message.channel, queue)
-            })
             player.on('trackStart', (queue, track) => {
                 if (queue.repeatMode !== 0) return
                 onNewTrack(queue.metadata.textChannel, track)
             })
+            player.on('queueEnd', queue => {
+                onPlaylistEnd(message.channel, queue)
+            })
+
             player.on('error', (_queue, _err) => {
                 /*client.player = null
                 queue.destroy()
                 console.log(err)*/
             })
-            player.on('connectionError',(_queue, _err) => {
+
+            player.on('connectionError', (_queue, _err) => {
                 //console.log(err)
+            })
+            player.on('botDisconnect', (queue) => {
+                queue.metadata.send('❌ | Fui desconectado do canal de voz, limpando a lista de reprodução!')
             })
         }
 

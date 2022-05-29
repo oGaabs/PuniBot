@@ -4,6 +4,7 @@ module.exports = {
     name: 'bassboosthigh',
     aliases: 'bsh',
     description: 'Bassboost_High filter',
+    category: 'musica',
     execute: async (message, _args, client) => {
         const voiceChannel = message.member.voice.channel
         const queue = client.player.getQueue(message.guild)

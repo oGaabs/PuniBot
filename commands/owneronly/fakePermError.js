@@ -2,6 +2,7 @@ module.exports = {
     name: 'fakePermError',
     aliases: ['fakepermissionerr','getfakepermissionembed', 'permerr','permembed'],
     description: 'Gerar erro de permissão!',
+    category: 'ownerOnly',
     execute: async (message, _args, client) => {
         const botOwner = client.botOwner
         const permissionErrorEmbed = await client.defaultEmbed.getPermissionError(

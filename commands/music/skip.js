@@ -4,6 +4,7 @@ module.exports = {
     name: 'skip',
     aliases: ['pular'],
     description: 'Pular música',
+    category: 'musica',
     execute: async (message, _args, client) => {
         const voiceChannel = message.member.voice.channel
         const queue = client.player.getQueue(message.guild)

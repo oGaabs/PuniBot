@@ -4,6 +4,7 @@ module.exports = {
     name: 'current',
     aliases: ['atual', 'playing', 'song', 'music', 'tocando', 'link', 'nowplaying'],
     description: 'Música atual',
+    category: 'musica',
     execute: async (message, _args, client) => {
         const voiceChannel = message.member.voice.channel
         const queue = client.player?.getQueue(message.guild)

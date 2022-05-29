@@ -4,6 +4,7 @@ module.exports = {
     name: 'queue',
     aliases: ['playlist', 'songs', 'lista', 'list', 'musicas', 'musics'],
     description: 'Músicas na playlist',
+    category: 'musica',
     execute: async (message, _args, client) => {
         const { queue } = message.client
         if (!queue) return message.reply('Não ha nenhuma musica sendo tocada!')
@@ -26,7 +27,7 @@ module.exports = {
             .setTitle('Lista de Reprodução')
             .setThumbnail(currentlySong.thumbnail)
             .setDescription(`Now playing: **[${currentlySong.title.substring(0, 51)}](${currentlySong.url})**\n\n` +
-                              playlist.join(' '))
+                playlist.join(' '))
         message.channel.send({ embeds: [listEmbed] })
     }
 }

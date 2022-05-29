@@ -3,8 +3,9 @@ const { QueueRepeatMode } = require('discord-player')
 
 module.exports = {
     name: 'loop',
-    aliases: ['autoplay','semparar', 'dontstop'],
+    aliases: ['autoplay', 'semparar', 'dontstop'],
     description: 'Loop na playlist',
+    category: 'musica',
     execute: async (message, _args, client) => {
         const voiceChannel = message.member.voice.channel
         const queue = client.player.getQueue(message.guild)
@@ -14,11 +15,11 @@ module.exports = {
 
         // Alterna a opção de repetir a playlist
         let autoPlay
-        if (queue.repeatMode === QueueRepeatMode.QUEUE){
+        if (queue.repeatMode === QueueRepeatMode.QUEUE) {
             queue.setRepeatMode(QueueRepeatMode.OFF)
             autoPlay = false
         }
-        else{
+        else {
             queue.setRepeatMode(QueueRepeatMode.QUEUE)
             autoPlay = true
         }

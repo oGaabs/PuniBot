@@ -2,6 +2,7 @@ module.exports = {
     name: 'random',
     aliases: ['aleatorio', 'rand', 'rnd'],
     description: 'Número aleatório!',
+    category: 'Outros',
     args: '(10-30)',
     execute: async (message, args, client) => {
         if (!args[0]) return message.reply(getRandomIntegerInRange().toString())

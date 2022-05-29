@@ -4,6 +4,7 @@ module.exports = {
     name: 'getException',
     aliases: ['generateException','error','erro','gerarErro','gerarException'],
     description: 'Gerar Erro',
+    category: 'ownerOnly',
     execute: async (message, _args, client) => {
         const botOwner = client.botOwner
 

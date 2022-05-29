@@ -5,6 +5,7 @@ module.exports = {
     aliases: ['latencia', 'latency', 'lag',
         'velocidade', 'api', 'p'],
     description: 'pong!',
+    category: 'informação',
     execute: async (message, _args, client) => {
         const pingingEmbed = new MessageEmbed()
             .setTitle('**Calculando...**')

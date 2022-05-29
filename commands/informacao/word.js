@@ -6,6 +6,7 @@ module.exports = {
     aliases: ['palavra', 'significado', 'dicionario', 'info', 'meaning',
         'mean', 'urban', 'sig', 'dic', 'wrd', 'w'],
     description: 'Significado da palavra!',
+    category: 'informação',
     args: '(palavra)',
     execute: async (message, args, client) => {
         const searchTerm = args[0] || 'pudim'

@@ -4,6 +4,7 @@ module.exports = {
     name: 'stop',
     aliases: ['parar', 'clear', 'limpar', 'desconectar', 'disconnect'],
     description: 'Parar playlist',
+    category: 'musica',
     execute: async (message, _args, client) => {
         const voiceChannel = message.member.voice.channel
         const queue = client.player.getQueue(message.guild)

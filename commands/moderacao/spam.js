@@ -1,9 +1,8 @@
-const { MessageEmbed } = require('discord.js')
-
 module.exports = {
     name: 'spam',
     aliases: ['flodar', 'floodar', 'flood', 'fl', 'sp'],
     description: 'Spam de Mensagens!',
+    category: 'moderação',
     args: '(qtdMensagens)',
     execute: async (message, args, client) => {
         if (!args[0]) return message.reply('Insira a quantidade de mensagens que você quer spammmr!')

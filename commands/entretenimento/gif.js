@@ -5,6 +5,7 @@ module.exports = {
     name: 'gif',
     aliases: ['tenor', 'g'],
     description: 'Mande um GIF!',
+    category: 'entretenimento',
     args: '(Tema)',
     execute: async (message, args, client) => {
         const searchTerm = args.join(' ') || 'pudim'

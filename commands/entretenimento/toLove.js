@@ -3,9 +3,10 @@ const { gifSearch } = require('../../utils')
 
 module.exports = {
     name: 'tolove',
-    aliases: ['shipar', 'tolove', 'tolover', 'love', 'amor','ship',
+    aliases: ['shipar', 'tolove', 'tolover', 'love', 'amor', 'ship',
         'matchmaking', 'match', 'tinder'],
     description: 'É um Amor verdadeiro?',
+    category: 'entretenimento',
     args: '@(Pessoa1) @(Pessoa2)',
     execute: async (message, _args, client) => {
         const users = message.mentions.users.first(2)

@@ -4,6 +4,7 @@ module.exports = {
     name: 'invite',
     aliases: ['convite', 'compartilhar', 'i'],
     description: 'Gera um convite!',
+    category: 'informação',
     execute: async (message, _args, client) => {
         const user = message.member
 

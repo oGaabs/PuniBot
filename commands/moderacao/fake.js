@@ -2,6 +2,7 @@ module.exports = {
     name: 'fake',
     aliases: ['fakear', 'troll'],
     description: 'Fakear um usuario e mensagem!',
+    category: 'moderação',
     args: '(Usuario) (Canal) (Mensagem) ',
     execute: async (message, args, client) => {
         const permissionErrorEmbed = await client.defaultEmbed.getPermissionError(

@@ -4,6 +4,7 @@ module.exports = {
     name: 'reset',
     aliases: ['restart','resetar','reiniciar'],
     description: 'Reiniciar Bot',
+    category: 'ownerOnly',
     execute: async (message, _args, client) => {
         const botOwner = client.botOwner
         const permissionErrorEmbed = await client.defaultEmbed.getPermissionError(

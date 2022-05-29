@@ -7,6 +7,7 @@ module.exports = {
     aliases: ['profile', 'perfil', 'member',
         'user', 'userinfo', 'info', 'a'],
     description: 'Informações de um usuario!',
+    category: 'informação',
     args: '(@usuario)',
     execute: async (message, _args, client) => {
         let userTarget = message.mentions.users.first()

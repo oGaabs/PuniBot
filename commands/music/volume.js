@@ -2,9 +2,10 @@ const { MessageEmbed } = require('discord.js')
 
 module.exports = {
     name: 'volume',
-    aliases: ['som','vl'],
+    aliases: ['som', 'vl'],
     description: 'Controlar volume',
     args: '(Número entre 0 e 100)',
+    category: 'musica',
     execute: async (message, args, client) => {
         const voiceChannel = message.member.voice.channel
         const queue = client.player.getQueue(message.guild)
