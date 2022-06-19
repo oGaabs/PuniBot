@@ -5,6 +5,7 @@ module.exports = async function onMessage(client) {
 
         if (!message.content.toLowerCase().startsWith(prefix)) {
             if (!message.mentions.has(client.user)) return
+            // Send help message to user when he/she mentions the bot
             return commands.get('help').execute(message, null, client)
         }
 
@@ -18,4 +19,17 @@ module.exports = async function onMessage(client) {
         args.shift()
         command.execute(message, args, client)
     })
+
+    client.on('interactionCreate', async (interaction) => {
+        // SelectMenu Handling
+        if (interaction.isSelectMenu()) {
+            await interaction.deferUpdate({ ephemeral: false })
+            const selectMenu = client.slashCommands.get(interaction.customId)
+            if (!selectMenu) return
+
+            return selectMenu.execute(interaction, client)
+        }
+    })
+
+
 }

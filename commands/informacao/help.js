@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js')
+const { MessageEmbed, MessageActionRow, MessageSelectMenu, Message } = require('discord.js')
 
 const formatString = (string) => `${string.charAt(0).toUpperCase()}${string.slice(1)}`
 
@@ -9,6 +9,7 @@ module.exports = {
     description: 'Mostra os comandos!',
     category: 'informação',
     execute: async (message, args, client) => {
+        const messageToEdit = args[1]
 
         const helpEmbed = new MessageEmbed()
             .setAuthor({ name: `${client.tag} Bot 🍮`, iconURL: client.user.avatarURL() })
@@ -16,14 +17,53 @@ module.exports = {
             .setFooter(client.getFooter(message.guild))
             .setTimestamp()
 
+        const painel = new MessageActionRow()
+            .addComponents([
+                new MessageSelectMenu()
+                    .setCustomId('help-menu')
+                    .setPlaceholder('Veja meus comandos.')
+                    .addOptions([
+                        {
+                            label: 'Entretenimento',
+                            description: 'Comandos relacionados a entretenimento.',
+                            emoji: '😎',
+                            value: 'entretenimento'
+                        },
+                        {
+                            label: 'Informação',
+                            description: 'Comandos relacionados a informação.',
+                            emoji: '📓',
+                            value: 'informação'
+                        },
+                        {
+                            label: 'Moderação',
+                            description: 'Comandos relacionados a moderação.',
+                            emoji: '👨‍✈️',
+                            value: 'moderação'
+                        },
+                        {
+                            label: 'Musica',
+                            description: 'Comandos relacionados a musica.',
+                            emoji: '🎵',
+                            value: 'musica'
+                        },
+                        {
+                            label: 'Outros',
+                            description: 'Outros comandos.',
+                            emoji: '💡',
+                            value: 'outros'
+                        },
+                        {
+                            label: 'Voltar',
+                            description: 'Voltar página.',
+                            emoji: '🔙',
+                            value: 'voltar'
+                        }
+                    ])
+            ])
 
-        const pudimEmbed = new MessageEmbed()
-            .setTitle('🍮| PUDIM')
-            .setThumbnail('https://revistamenu.com.br/wp-content/uploads/2020/05/diadopudim-1280x720.jpg')
-            .setFooter(client.getFooter(message.guild))
-            .setTimestamp()
-
-
+        // Não foi especificado qual o tipo de ajuda
+        // então envia um help embed padrão com categorias e comandos
         if (!args[0]) {
             let categories = [...new Set(client.categories)]
 
@@ -51,14 +91,19 @@ module.exports = {
                     }
                 )
 
-            return message.channel.send({ embeds: [helpEmbed, pudimEmbed] })
+            const pudimEmbed = new MessageEmbed()
+                .setTitle('🍮| PUDIM')
+                .setThumbnail('https://revistamenu.com.br/wp-content/uploads/2020/05/diadopudim-1280x720.jpg')
+                .setFooter(client.getFooter(message.guild))
+                .setTimestamp()
+
+            return sendHelpEmbed([helpEmbed, pudimEmbed ],[painel])
         }
-
-
         const typeOfHelp = args[0].toLowerCase()
 
         let isCategory = client.categories.map(c => c.toLowerCase()).includes(typeOfHelp)
 
+        // Foi solicitado um help embed de categoria
         if (isCategory) {
             const categoryName = formatString(typeOfHelp)
 
@@ -82,9 +127,10 @@ module.exports = {
                 .addFields(
                     commands
                 )
-            return message.channel.send({ embeds: [helpEmbed] })
+            return sendHelpEmbed([helpEmbed])
         }
 
+        // Foi solicitado um help embed de comando
         const cmd = client.commands.find(cmd => cmd.name === typeOfHelp || (cmd.aliases && cmd.aliases.includes(typeOfHelp)))
 
         if (cmd != undefined) {
@@ -104,9 +150,10 @@ module.exports = {
                         inline: true
                     }
                 )
-            return message.channel.send({ embeds: [helpEmbed]})
+            return sendHelpEmbed([helpEmbed])
         }
 
+        return message.reply(`Esse comando não existe. Digite ${client.prefix} help para ver todos os comandos!`)
 
         function getCommandsOfCategory(category) {
             let commands
@@ -126,6 +173,13 @@ module.exports = {
             }
 
             return commands
+        }
+
+        function sendHelpEmbed(embeds, components) {
+            if (messageToEdit instanceof Message)
+                return messageToEdit.edit({ embeds,  components })
+
+            message.channel.send({ embeds,  components})
         }
 
     }
