@@ -42,12 +42,6 @@ module.exports = {
                             value: 'moderação'
                         },
                         {
-                            label: 'Musica',
-                            description: 'Comandos relacionados a musica.',
-                            emoji: '🎵',
-                            value: 'musica'
-                        },
-                        {
                             label: 'Outros',
                             description: 'Outros comandos.',
                             emoji: '💡',
