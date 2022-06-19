@@ -30,6 +30,4 @@ module.exports = async function onMessage(client) {
             return selectMenu.execute(interaction, client)
         }
     })
-
-
 }
