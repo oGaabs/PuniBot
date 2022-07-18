@@ -1,9 +1,16 @@
-module.exports = {
-    name: 'fakePermError',
-    aliases: ['fakepermissionerr','getfakepermissionembed', 'permerr','permembed'],
-    description: 'Gerar erro de permissão!',
-    category: 'ownerOnly',
-    execute: async (message, _args, client) => {
+const Command = require('../../utils/base/Command.js')
+
+class FakePermError extends Command {
+    constructor(client) {
+        super(client, {
+            name: 'fakePermError',
+            aliases: ['fakepermissionerr','getfakepermissionembed', 'permerr','permembed'],
+            description: 'Gerar erro de permissão!',
+            category: 'ownerOnly'
+        })
+    }
+
+    async execute (message, _args, client){
         const botOwner = client.botOwner
         const permissionErrorEmbed = await client.defaultEmbed.getPermissionError(
             '*Verifique se você ou o bot possui a permissão:*',
@@ -19,3 +26,5 @@ module.exports = {
         message.channel.send({ embeds: [permissionErrorEmbed] })
     }
 }
+
+module.exports = FakePermError

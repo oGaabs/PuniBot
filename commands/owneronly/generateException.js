@@ -1,11 +1,18 @@
+const Command = require('../../utils/base/Command.js')
+
 const { MessageEmbed } = require('discord.js')
 
-module.exports = {
-    name: 'getException',
-    aliases: ['generateException','error','erro','gerarErro','gerarException'],
-    description: 'Gerar Erro',
-    category: 'ownerOnly',
-    execute: async (message, _args, client) => {
+class GetException extends Command {
+    constructor(client) {
+        super(client, {
+            name: 'getException',
+            aliases: ['generateException','error','erro','gerarErro','gerarException'],
+            description: 'Gerar Erro',
+            category: 'ownerOnly'
+        })
+    }
+
+    async execute (message, _args, client){
         const botOwner = client.botOwner
 
         const permissionErrorEmbed = await client.defaultEmbed.getPermissionError(
@@ -27,3 +34,6 @@ module.exports = {
         message.channel.send('')
     }
 }
+
+module.exports = GetException
+

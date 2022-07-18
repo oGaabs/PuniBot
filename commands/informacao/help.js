@@ -1,14 +1,21 @@
+const Command = require('../../utils/base/Command.js')
+
 const { MessageEmbed, MessageActionRow, MessageSelectMenu, Message } = require('discord.js')
 
 const formatString = (string) => `${string.charAt(0).toUpperCase()}${string.slice(1)}`
 
-module.exports = {
-    name: 'help',
-    aliases: ['ajuda', 'comandos', 'comandos',
-        'bot', 'h'],
-    description: 'Mostra os comandos!',
-    category: 'informação',
-    execute: async (message, args, client) => {
+class Help extends Command {
+    constructor(client) {
+        super(client, {
+            name: 'help',
+            aliases: ['ajuda', 'comandos', 'comandos',
+                'bot', 'h'],
+            description: 'Mostra os comandos!',
+            category: 'informação'
+        })
+    }
+
+    async execute (message, args, client){
         const messageToEdit = args[1]
 
         const helpEmbed = new MessageEmbed()
@@ -175,6 +182,7 @@ module.exports = {
 
             message.channel.send({ embeds,  components})
         }
-
     }
 }
+
+module.exports = Help

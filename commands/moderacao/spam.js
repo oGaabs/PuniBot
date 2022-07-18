@@ -1,10 +1,17 @@
-module.exports = {
-    name: 'spam',
-    aliases: ['flodar', 'floodar', 'flood', 'fl', 'sp'],
-    description: 'Spam de Mensagens!',
-    category: 'moderação',
-    args: '(qtdMensagens)',
-    execute: async (message, args, client) => {
+const Command = require('../../utils/base/Command.js')
+
+class Spam extends Command {
+    constructor(client) {
+        super(client, {
+            name: 'spam',
+            aliases: ['flodar', 'floodar', 'flood', 'fl', 'sp'],
+            description: 'Spam de Mensagens!',
+            category: 'moderação',
+            args: '(qtdMensagens)'
+        })
+    }
+
+    async execute (message, args, client){
         if (!args[0]) return message.reply('Insira a quantidade de mensagens que você quer spammmr!')
         if (isNaN(args[0])) return message.reply('Insira apenas números!')
         if (args[0] > 30 || args[0] < 1) return message.reply('So é possível spammar de 1 a 30 mensagens!')
@@ -33,3 +40,6 @@ module.exports = {
         message.reply('Spam realizado com sucesso! 👍')
     }
 }
+
+module.exports = Spam
+

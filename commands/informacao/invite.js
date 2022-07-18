@@ -1,11 +1,18 @@
+const Command = require('../../utils/base/Command.js')
+
 const { MessageEmbed } = require('discord.js')
 
-module.exports = {
-    name: 'invite',
-    aliases: ['convite', 'compartilhar', 'i'],
-    description: 'Gera um convite!',
-    category: 'informação',
-    execute: async (message, _args, client) => {
+class Invite extends Command {
+    constructor(client) {
+        super(client, {
+            name: 'invite',
+            aliases: ['convite', 'compartilhar', 'i'],
+            description: 'Gera um convite!',
+            category: 'informação'
+        })
+    }
+
+    async execute (message, _args, client){
         const user = message.member
 
         const permissionErrorEmbed = await client.defaultEmbed.getPermissionError(
@@ -39,3 +46,5 @@ module.exports = {
         message.reply({ embeds: [inviteEmbed] })
     }
 }
+
+module.exports = Invite

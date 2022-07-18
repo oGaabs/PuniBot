@@ -1,12 +1,19 @@
+const Command = require('../../utils/base/Command.js')
+
 const { MessageEmbed } = require('discord.js')
 
-module.exports = {
-    name: 'fight',
-    aliases: ['batalhar', 'batalha', 'lutar', 'luta', 'desafio'],
-    description: 'Lutar contra outro usuário!',
-    category: 'entretenimento',
-    args: '@(Pessoa1) @(Pessoa2)',
-    execute: async (message, _args, client) => {
+class Fight extends Command {
+    constructor(client) {
+        super(client, {
+            name: 'fight',
+            aliases: ['batalhar', 'batalha', 'lutar', 'luta', 'desafio'],
+            description: 'Lutar contra outro usuário!',
+            category: 'entretenimento',
+            args: '@(Pessoa1) @(Pessoa2)'
+        })
+    }
+
+    async execute (message, _args, client){
         const users = message.mentions.users.first(2)
         if (!users || users.length < 1) {
             return message.reply('Mencione corretamente os desafiantes\n' +
@@ -34,22 +41,24 @@ module.exports = {
             .setTimestamp()
 
         message.reply({ embeds: [fightEmbed] })
+
+        function getResultadoDaBatalha(vencedor, perdedor) {
+            const frasesVencedor = [
+                '**venceu** a batalha!',
+                '**ganhou** a batalha!'
+            ]
+            const frasesPerdedor = [
+                '**perdeu** a batalha!',
+                '**morreu** em combate!'
+            ]
+
+            const fraseVencedor = frasesVencedor[Math.floor(Math.random() * frasesVencedor.length)]
+            const frasePerdedor = frasesPerdedor[Math.floor(Math.random() * frasesPerdedor.length)]
+
+            return (`${vencedor}\n ${fraseVencedor}\n` +
+                `${perdedor}\n ${frasePerdedor}\n`)
+        }
     }
 }
 
-function getResultadoDaBatalha(vencedor, perdedor) {
-    const frasesVencedor = [
-        '**venceu** a batalha!',
-        '**ganhou** a batalha!'
-    ]
-    const frasesPerdedor = [
-        '**perdeu** a batalha!',
-        '**morreu** em combate!'
-    ]
-
-    const fraseVencedor = frasesVencedor[Math.floor(Math.random() * frasesVencedor.length)]
-    const frasePerdedor = frasesPerdedor[Math.floor(Math.random() * frasesPerdedor.length)]
-
-    return (`${vencedor}\n ${fraseVencedor}\n` +
-        `${perdedor}\n ${frasePerdedor}\n`)
-}
+module.exports = Fight

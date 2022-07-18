@@ -1,11 +1,18 @@
+const Command = require('../../utils/base/Command.js')
+
 const { MessageEmbed } = require('discord.js')
 
-module.exports = {
-    name: 'reset',
-    aliases: ['restart','resetar','reiniciar'],
-    description: 'Reiniciar Bot',
-    category: 'ownerOnly',
-    execute: async (message, _args, client) => {
+class ResetBot extends Command {
+    constructor(client) {
+        super(client, {
+            name: 'reset',
+            aliases: ['restart','resetar','reiniciar'],
+            description: 'Reiniciar Bot',
+            category: 'ownerOnly'
+        })
+    }
+
+    async execute (message, _args, client){
         const botOwner = client.botOwner
         const permissionErrorEmbed = await client.defaultEmbed.getPermissionError(
             '**Comando somente para o dono do Bot!*',
@@ -26,3 +33,5 @@ module.exports = {
         client.restartBot()
     }
 }
+
+module.exports = ResetBot

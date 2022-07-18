@@ -1,14 +1,21 @@
+const Command = require('../../utils/base/Command.js')
+
 const { MessageEmbed } = require('discord.js')
 const nodeFetch = require('node-fetch')
 
-module.exports = {
-    name: 'word',
-    aliases: ['palavra', 'significado', 'dicionario', 'info', 'meaning',
-        'mean', 'urban', 'sig', 'dic', 'wrd', 'w'],
-    description: 'Significado da palavra!',
-    category: 'informação',
-    args: '(palavra)',
-    execute: async (message, args, client) => {
+class Word extends Command {
+    constructor(client) {
+        super(client, {
+            name: 'word',
+            aliases: ['palavra', 'significado', 'dicionario', 'info', 'meaning',
+                'mean', 'urban', 'sig', 'dic', 'wrd', 'w'],
+            description: 'Significado da palavra!',
+            category: 'informação',
+            args: '(palavra)'
+        })
+    }
+
+    async execute (message, args, client){
         const searchTerm = args[0] || 'pudim'
         const msg = await message.reply('**Procurando significado...**')
 
@@ -40,3 +47,6 @@ module.exports = {
         }
     }
 }
+
+module.exports = Word
+

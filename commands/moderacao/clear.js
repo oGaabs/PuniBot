@@ -1,11 +1,18 @@
-module.exports = {
-    name: 'clear',
-    aliases: ['limpar', 'excluir', 'deletar',
-        'del', 'cl'],
-    description: 'Limpa as mensagens!',
-    category: 'moderação',
-    args: '(qtdMensagens)',
-    execute: async (message, args, client) => {
+const Command = require('../../utils/base/Command.js')
+
+class Clear extends Command {
+    constructor(client) {
+        super(client, {
+            name: 'clear',
+            aliases: ['limpar', 'excluir', 'deletar',
+                'del', 'cl'],
+            description: 'Limpa as mensagens!',
+            category: 'moderação',
+            args: '(qtdMensagens)'
+        })
+    }
+
+    async execute (message, args, client){
         if (!args[0]) return message.reply('Insira a quantidade de mensagens que você quer limpar!')
 
         const permissionErrorEmbed = await client.defaultEmbed.getPermissionError(
@@ -43,3 +50,5 @@ module.exports = {
         })
     }
 }
+
+module.exports = Clear

@@ -1,12 +1,18 @@
+const Command = require('../../../utils/base/Command.js')
+
 const { MessageEmbed, MessageActionRow, MessageSelectMenu} = require('discord.js')
 
+class AutoRoleCreate extends Command {
+    constructor(client) {
+        super(client, {
+            name: 'autoRoleCreate',
+            aliases: ['arcreate','autorole','arc'],
+            description: 'Da cargos ao clicar no botão de seleção.',
+            category: 'outros'
+        })
+    }
 
-module.exports = {
-    name: 'autoRoleCreate',
-    aliases: ['arcreate','autorole','arc'],
-    description: 'Da cargos ao clicar no botão de seleção.',
-    category: 'outros',
-    execute: async (message, args, client) => {
+    async execute (message, args, client){
         const permissionErrorEmbed = await client.defaultEmbed.getPermissionError(
             '*Verifique se você ou o bot possui a permissão:*',
             '`OWNER`'
@@ -52,3 +58,5 @@ module.exports = {
         })
     }
 }
+
+module.exports = AutoRoleCreate

@@ -1,11 +1,18 @@
+const Command = require('../../utils/base/Command.js')
+
 const { MessageEmbed } = require('discord.js')
 
-module.exports = {
-    name: 'stopbot',
-    aliases: ['pararbot','desligar'],
-    description: 'Desliga o Bot',
-    category: 'ownerOnly',
-    execute: async (message, _args, client) => {
+class StopBot extends Command {
+    constructor(client) {
+        super(client, {
+            name: 'stopbot',
+            aliases: ['pararbot','desligar'],
+            description: 'Desliga o Bot',
+            category: 'ownerOnly',
+        })
+    }
+
+    async execute (message, _args, client){
         const botOwner = client.botOwner
 
         const permissionErrorEmbed = await client.defaultEmbed.getPermissionError(
@@ -28,3 +35,5 @@ module.exports = {
         process.exit(0)
     }
 }
+
+module.exports = StopBot

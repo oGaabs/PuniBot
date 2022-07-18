@@ -1,12 +1,19 @@
+const Command = require('../../utils/base/Command.js')
+
 const { MessageEmbed } = require('discord.js')
 
-module.exports = {
-    name: 'ping',
-    aliases: ['latencia', 'latency', 'lag',
-        'velocidade', 'api', 'p'],
-    description: 'pong!',
-    category: 'informação',
-    execute: async (message, _args, client) => {
+class Ping extends Command {
+    constructor(client) {
+        super(client, {
+            name: 'ping',
+            aliases: ['latencia', 'latency', 'lag',
+                'velocidade', 'api', 'p'],
+            description: 'pong!',
+            category: 'informação'
+        })
+    }
+
+    async execute (message, _args, client){
         const pingingEmbed = new MessageEmbed()
             .setTitle('**Calculando...**')
             .setColor(client.colors['default'])
@@ -23,3 +30,6 @@ module.exports = {
         })
     }
 }
+
+module.exports = Ping
+
