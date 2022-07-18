@@ -7,6 +7,8 @@ module.exports = {
         // para crianças menores de 13 anos, em que 13 é a idade minima para usar o Discord no Brasil.
         const response = await nodeFetch(`https://g.tenor.com/v1/search?q=${searchTerm}&key=${process.env.TENORKEY}&contentfilter=low&media_filter=minimal`)
             .then(res => res.json())
+        if(response.results.length < 1)
+            return null
         const gifPost = response.results[Math.floor(Math.random() * response.results.length)]
         return { image: gifPost.media[0].gif.url, url: gifPost.url }
     }
