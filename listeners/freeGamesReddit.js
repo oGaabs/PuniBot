@@ -1,7 +1,7 @@
 const nodeFetch = require('node-fetch')
 // This module needs major rework, refactoring and urgent optimizations
 // Working but not finished
-//
+// TODO: Refator modulo e adicionar documentação
 
 module.exports = async function freeGamesReddit(client) {
     if (client != '.') return

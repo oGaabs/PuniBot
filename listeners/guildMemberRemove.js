@@ -1,9 +1,6 @@
 const { MessageEmbed } = require('discord.js')
 
 module.exports = async function guildMemberRemove(client) {
-    const canais = client.channels.cache
-    const welcomeChannel = canais.get('926540915819028521')
-
     client.on('guildMemberRemove', async member => {
         if (member.user.bot) return
         const memberName = member.displayName
@@ -18,6 +15,9 @@ module.exports = async function guildMemberRemove(client) {
             .setDescription('Esperamos que nossos caminhos se alinhem novamente!')
             .setFooter(client.getFooter(member.guild))
             .setTimestamp()
+
+        const canais = client.channels.cache
+        const welcomeChannel = canais.get('926540915819028521')
         welcomeChannel.send({ embeds: [goodbyeEmbed] })
     })
 }
