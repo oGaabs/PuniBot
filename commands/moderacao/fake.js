@@ -1,10 +1,17 @@
-module.exports = {
-    name: 'fake',
-    aliases: ['fakear', 'troll'],
-    description: 'Fakear um usuario e mensagem!',
-    category: 'moderação',
-    args: '(Usuario) (Canal) (Mensagem) ',
-    execute: async (message, args, client) => {
+const Command = require('../../utils/base/Command.js')
+
+class Fake extends Command {
+    constructor(client) {
+        super(client, {
+            name: 'fake',
+            aliases: ['fakear', 'troll'],
+            description: 'Fakear um usuario e mensagem!',
+            category: 'moderação',
+            args: '(Usuario) (Canal) (Mensagem) '
+        })
+    }
+
+    async execute (message, args, client, isUsedByOtherCommand){
         const permissionErrorEmbed = await client.defaultEmbed.getPermissionError(
             '*Verifique se você ou o bot possui a permissão:*',
             '`ADMINISTRATOR`'
@@ -13,7 +20,7 @@ module.exports = {
         permissionErrorEmbed.setColor(client.colors['default'])
         permissionErrorEmbed.setFooter(client.getFooter(message.guild))
 
-        if (!message.member.permissions.has('ADMINISTRATOR'))
+        if (!isUsedByOtherCommand && !message.member.permissions.has('ADMINISTRATOR'))
             return message.channel.send({ embeds: [permissionErrorEmbed] })
 
         const userToFake = message.mentions.users.first()
@@ -30,3 +37,5 @@ module.exports = {
         })
     }
 }
+
+module.exports = Fake
