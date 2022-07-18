@@ -1,15 +1,24 @@
+const Command = require('../../utils/base/Command.js')
+
 const { MessageEmbed } = require('discord.js')
 const { gifSearch } = require('../../utils')
 
-module.exports = {
-    name: 'gif',
-    aliases: ['tenor', 'g'],
-    description: 'Mande um GIF!',
-    category: 'entretenimento',
-    args: '(Tema)',
-    execute: async (message, args, client) => {
+class GifSearch extends Command {
+    constructor(client) {
+        super(client, {
+            name: 'gif',
+            aliases: ['tenor', 'gifsearch','g'],
+            description: 'Mande um GIF!',
+            category: 'entretenimento',
+            args: '(Tema)'
+        })
+    }
+
+    async execute (message, args, client){
         const searchTerm = args.join(' ') || 'pudim'
         const gif = await gifSearch.getGif(searchTerm)
+        if (gif === null)
+            return message.reply('Não encontrei nenhum GIF!')
 
         const gifEmbed = new MessageEmbed()
             .setTitle('Aqui está seu gif!')
@@ -20,3 +29,6 @@ module.exports = {
         message.reply({ embeds: [gifEmbed] })
     }
 }
+
+module.exports = GifSearch
+
