@@ -13,7 +13,7 @@ module.exports = async function onMessage(client) {
         if (!args) return
 
         const commandName = args[0].toLowerCase()
-        const command = commands.find(cmd => cmd.name === commandName || (cmd.aliases && cmd.aliases.includes(commandName)))
+        const command = client.getCommand(commandName)
         if (!command) return
 
         args.shift()
