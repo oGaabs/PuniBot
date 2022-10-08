@@ -15,7 +15,8 @@ module.exports = function errorHandler(client) {
             .setTimestamp()
             .setFooter(client.getFooter(logChannel.guild))
 
-        logChannel.send({ embeds: [errorEmbed] })
+        if (logChannel)
+            logChannel.send({ embeds: [errorEmbed] })
 
         client.logger.warn('[Anti-Crash] ::', 'Unhandled Rejection', true)
         client.logger.error('[Error] => ', error.stack + '\n')
