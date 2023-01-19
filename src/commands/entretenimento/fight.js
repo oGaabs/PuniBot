@@ -1,0 +1,66 @@
+const Command = require('../../utils/base/Command.js')
+
+const { EmbedBuilder } = require('discord.js')
+
+class Fight extends Command {
+    constructor(client) {
+        super(client, {
+            name: 'fight',
+            aliases: ['batalhar', 'batalha', 'lutar', 'luta', 'desafio'],
+            description: 'Lutar contra outro usuário!',
+            category: 'entretenimento',
+            args: '@(Pessoa1) @(Pessoa2)'
+        })
+    }
+
+    async execute(message, _args, client) {
+        const users = message.mentions.users.first(2)
+        if (!users || users.length < 1) {
+            return message.reply('Mencione corretamente os desafiantes\n' +
+                `Exemplo: ${client.prefix} fight <@407734609967841299> <@382990022191874048>`)
+        }
+
+        const desafiantes = []
+        desafiantes[0] = users.at(0)
+        desafiantes[1] = users.at(1) ?? message.author
+
+        const vencedor = Math.round(Math.random()) ? desafiantes[0] : desafiantes[1]
+        const perdedor = desafiantes[0] !== vencedor ? desafiantes[0] : desafiantes[1]
+
+        const searchTerm = 'anime fight'
+        const gif = await client.gifSearch.getGif(searchTerm)
+
+        const fightEmbed = new EmbedBuilder()
+            .setTitle('⚔️ | Batalha está prestes a começar!')
+            .setColor(client.colors['default'])
+            .setImage(gif.image)
+            .setURL(gif.url)
+            .setDescription(`**Desafiante 1:** ${desafiantes[0]} e **Desafiante 2**: ${desafiantes[1]}\n`)
+            .addFields([
+                { name: 'Resultado da Batalha:\n', value: getResultadoDaBatalha(vencedor, perdedor) }
+            ])
+            .setFooter(client.getFooter(message.guild))
+            .setTimestamp()
+
+        message.reply({ embeds: [fightEmbed] })
+
+        function getResultadoDaBatalha(vencedor, perdedor) {
+            const frasesVencedor = [
+                '**venceu** a batalha!',
+                '**ganhou** a batalha!'
+            ]
+            const frasesPerdedor = [
+                '**perdeu** a batalha!',
+                '**morreu** em combate!'
+            ]
+
+            const fraseVencedor = frasesVencedor[Math.floor(Math.random() * frasesVencedor.length)]
+            const frasePerdedor = frasesPerdedor[Math.floor(Math.random() * frasesPerdedor.length)]
+
+            return (`${vencedor}\n ${fraseVencedor}\n` +
+                `${perdedor}\n ${frasePerdedor}\n`)
+        }
+    }
+}
+
+module.exports = Fight
