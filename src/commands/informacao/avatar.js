@@ -40,7 +40,7 @@ class Avatar extends Command {
                 { name: 'Discord Tag', value: codeBlock('md', userTag), inline: true },
                 { name: 'Status', value: codeBlock('md', `# ${userStatus}`), inline: true },
                 { name: 'Jogando', value: codeBlock('md', `# ${userGame}`), inline: false },
-                { name: 'Discord Name', value: codeBlock('diff', `- ${userName} -`), inline: true },
+                { name: 'Discord Name', value: codeBlock('yaml', `- ${userName} -`), inline: true },
                 { name: 'Apelido no servidor', value: codeBlock(userAlias), inline: true },
                 { name: 'ID', value: codeBlock(userId), inline: true },
                 { name: 'Conta criada em', value: `${inlineCode(moment(userTarget.createdTimestamp).format('LL'))}`, inline: true },

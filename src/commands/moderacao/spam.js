@@ -1,5 +1,7 @@
 const Command = require('../../utils/base/Command.js')
 
+const { PermissionsBitField: { Flags: PERMISSIONS } } = require('discord.js')
+
 class Spam extends Command {
     constructor(client) {
         super(client, {
@@ -11,7 +13,7 @@ class Spam extends Command {
         })
     }
 
-    async execute (message, args, client){
+    async execute(message, args, client) {
         if (!args[0]) return message.reply('Insira a quantidade de mensagens que você quer spammmr!')
         if (isNaN(args[0])) return message.reply('Insira apenas números!')
         if (args[0] > 30 || args[0] < 1) return message.reply('So é possível spammar de 1 a 30 mensagens!')
@@ -24,7 +26,7 @@ class Spam extends Command {
         permissionErrorEmbed.setColor(client.colors['default'])
         permissionErrorEmbed.setFooter(client.getFooter(message.guild))
 
-        if (!message.member.permissions.has('ADMINISTRATOR'))
+        if (!message.member.permissions.has(PERMISSIONS.Administrator))
             return message.channel.send({ embeds: [permissionErrorEmbed] })
         let spamCount = 0
         while (spamCount < args[0]) {

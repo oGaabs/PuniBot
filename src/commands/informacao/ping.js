@@ -13,21 +13,24 @@ class Ping extends Command {
         })
     }
 
-    async execute(message, _args, client) {
+    async execute(userMessage, _args, client) {
         const pingingEmbed = new EmbedBuilder()
             .setTitle('**Calculando...**')
             .setColor(client.colors['default'])
-            .setFooter(client.getFooter(message.guild))
-        await message.channel.send({ embeds: [pingingEmbed] }).then(m => {
-            const latencyEmbed = new EmbedBuilder()
-                .setTitle('**🏓 PONG! 🏓**')
-                .setColor(client.colors['default'])
-                .addFields(
-                    { name: 'Bot Latency:', value: `${(m.createdTimestamp - message.createdTimestamp)} ms` },
-                    { name: 'API Latency:', value: `${Math.round(client.ws.ping)} ms`, inline: true },
-                )
-            m.edit({ embeds: [latencyEmbed] })
-        })
+            .setFooter(client.getFooter(userMessage.guild))
+
+        const botMessage = await userMessage.channel.send({ embeds: [pingingEmbed] })
+        const delayEntreMensagens = botMessage.createdTimestamp - userMessage.createdTimestamp
+
+        const latencyEmbed = new EmbedBuilder()
+            .setTitle('**🏓 PONG! 🏓**')
+            .addFields(
+                { name: 'Bot Latency:', value: `${(delayEntreMensagens)} ms` },
+                { name: 'API Latency:', value: `${Math.round(client.ws.ping)} ms`, inline: true },
+            )
+            .setColor(client.colors['default'])
+
+        botMessage.edit({ embeds: [latencyEmbed] })
     }
 }
 
