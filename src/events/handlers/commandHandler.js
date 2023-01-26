@@ -1,15 +1,15 @@
-const { ChannelType } = require('discord.js')
+const { ChannelType, Events } = require('discord.js')
 
 module.exports = async function onMessage(client) {
     const { prefix, commands } = client
-    client.on('messageCreate', async message => {
+    client.on(Events.MessageCreate, async message => {
         if (message.channel.type === ChannelType.DM || message.author.bot) return
 
         if (!message.content.toLowerCase().startsWith(prefix)) {
             if (!message.mentions.has(client.user)) return
 
             // Manda uma mensagem de ajuda quando o usuario mencionar o bot
-            return commands.get('help').execute(message, null, client)
+            return commands.get('help').execute(message, [], client)
         }
 
         let args = message.content.slice(prefix.length).trim().split(/\s+/)
@@ -23,7 +23,7 @@ module.exports = async function onMessage(client) {
         command.execute(message, args, client)
     })
 
-    client.on('interactionCreate', async (interaction) => {
+    client.on(Events.InteractionCreate, async interaction => {
         // SelectMenu Handling
         if (interaction.isStringSelectMenu()) {
             await interaction.deferUpdate({ ephemeral: false })

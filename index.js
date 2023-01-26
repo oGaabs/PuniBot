@@ -1,9 +1,11 @@
 require('dotenv').config()
 
-
 const { GatewayIntentBits, Events } = require('discord.js')
+const { version } = require('./package.json')
+
 const startHost = require('./src/config/server')
 const PuniBot = require('./src/PuniBot')
+
 
 const client = new PuniBot({
     intents: [
@@ -11,9 +13,12 @@ const client = new PuniBot({
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildBans,
         GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.GuildPresences,
+        GatewayIntentBits.GuildMembers,
         GatewayIntentBits.MessageContent
     ]
 })
+
 
 client.once(Events.ClientReady, async () => {
     const botOwner = await client.application.fetch().then(app => client.users.fetch(app.owner))
@@ -35,18 +40,19 @@ client.once(Events.ClientReady, async () => {
     })
 
     // Calcula o ping do bot e manda a mensagem para o dono via DM
-    botOwner.send('Test | Estou online 🤨👍').then(async startMessage => {
+    botOwner.send('Estou online 🤨👍').then(async startMessage => {
+        // Calculate ping
         const finalMessage = await botOwner.send('**Calculando...**')
         const botPing = finalMessage.createdTimestamp - startMessage.createdTimestamp
         const apiPing = Math.round(client.ws.ping)
-
-        // Advise owner via DM about the bot's ping
-        botOwner.send(`Bot Latency: ${botPing} ms, API Latency: ${apiPing} ms`)
         finalMessage.delete()
 
+        // Manda o calculo de ping para o dono via DM
+        botOwner.send(`Bot Latency: ${botPing} ms, API Latency: ${apiPing} ms`)
+
         // Printa/Debuga o status do bot
-        client.logger.warn('', `\n[${client.logger.getDate()}] PuniBOT is ready!`)
-        client.logger.alert('=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=', '')
+        client.logger.alert('\n=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=', '')
+        client.logger.warn('', `[${client.logger.getDate()}] PuniBOT v${version} is ready!`)
         client.logger.debug('Bot: ', client.tag)
         client.logger.debug('Status: ', 'Initialized')
         client.logger.debug('Memory: ', `${Math.round(process.memoryUsage().rss / 1024 / 1024 * 100) / 100}/1024 MB`)
