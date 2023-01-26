@@ -1,5 +1,7 @@
 const Command = require('../../utils/base/Command.js')
 
+const { PermissionsBitField: { Flags: PERMISSIONS }, inlineCode } = require('discord.js')
+
 class Clear extends Command {
     constructor(client) {
         super(client, {
@@ -12,42 +14,62 @@ class Clear extends Command {
         })
     }
 
-    async execute (message, args, client){
+
+
+    async execute(message, args, client) {
         if (!args[0]) return message.reply('Insira a quantidade de mensagens que você quer limpar!')
 
         const permissionErrorEmbed = await client.defaultEmbed.getPermissionError(
             '*Verifique se você ou o bot possui a permissão:*',
-            '`MANAGE_MESSAGES`'
+            inlineCode(PERMISSIONS.ManageMessages)
         )
 
         permissionErrorEmbed.setColor(client.colors['default'])
         permissionErrorEmbed.setFooter(client.getFooter(message.guild))
 
-        if (!message.member.permissions.has('MANAGE_MESSAGES'))
+        if (!message.member.permissions.has(PERMISSIONS.ManageMessages))
             return message.channel.send({ embeds: [permissionErrorEmbed] })
 
         let deletedCount = 0
         if (args[0].toLowerCase() === 'all') {
-            let remainingMessages = 0
-            do {
-                await message.channel.bulkDelete(99, true).then(deletedMessages => {
-                    remainingMessages = deletedMessages.size
-                    deletedCount += remainingMessages
-                })
-            }
-            while (remainingMessages != 0)
+            deletedCount = await this.clearAllMessagesInChannel(message.channel)
         }
         else {
             if (isNaN(args[0])) return message.reply('Insira apenas números!')
-            if (args[0] >= 100 || args[0] < 1) return message.reply('So é possível deletar de 1 a 99 mensagens!')
 
-            await message.channel.bulkDelete(++args[0], true).then(deletedMessages => {
-                deletedCount += deletedMessages.size
+            let quantityToDelete = parseInt(args[0])
+
+            if (quantityToDelete >= 100 || quantityToDelete < 1)
+                return message.reply('So é possível deletar de 1 a 99 mensagens!')
+
+            deletedCount = await this.clearMessagesInChannel(quantityToDelete, message.channel)
+        }
+
+        const msg = await message.channel.send(`${message.author} ` + deletedCount + ' mensagens limpadas com sucesso! 👍')
+        setTimeout(() => msg.delete(), 3000)
+    }
+
+    async clearAllMessagesInChannel(channel) {
+        let deletedCount = 0
+        let alreadyDeleted = 0
+        do {
+            await channel.bulkDelete(100, true).then(deletedMessages => {
+                alreadyDeleted = deletedMessages.size
+                deletedCount += alreadyDeleted
             })
         }
-        message.channel.send(`${message.author} ` + deletedCount + ' mensagens limpadas com sucesso! 👍').then(msg => {
-            setTimeout(() => msg.delete(), 3000)
+        while (alreadyDeleted != 0)
+
+        return deletedCount
+    }
+
+    async clearMessagesInChannel(quantity, channel) {
+        let deletedCount = 0
+        await channel.bulkDelete(++quantity, true).then(deletedMessages => {
+            deletedCount = deletedMessages.size
         })
+
+        return deletedCount
     }
 }
 
