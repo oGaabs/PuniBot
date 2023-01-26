@@ -6,6 +6,7 @@ class Command{
         this.aliases = options.aliases || []
         this.description = options.description || ''
         this.category = options.category || undefined
+        this.args = options.args || ''
     }
 
     getCommandsOfCategory(category) {
