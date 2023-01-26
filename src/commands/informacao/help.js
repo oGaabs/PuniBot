@@ -1,6 +1,6 @@
 const Command = require('../../utils/base/Command.js')
 
-const { EmbedBuilder, ActionRowBuilder, StringSelectMenuBuilder } = require('discord.js')
+const { EmbedBuilder, ActionRowBuilder, StringSelectMenuBuilder, inlineCode } = require('discord.js')
 
 const formatString = (string) => `${string.charAt(0).toUpperCase()}${string.slice(1)}`
 
@@ -30,35 +30,30 @@ class Help extends Command {
         return 'error'
     }
 
-    async execute(message, args, client) {
+    async execute(message, args, client, updateMessage) {
         args = args[0]?.toLowerCase()
 
         const typeOfHelp = this.getTypeOfHelp(args)
 
         const helpEmbeds = {
-            default: () => { // Mensagem de ajuda padrão
-                this.defaultHelpEmbed(client, message)
-            },
-            category: () => { // Mensagem de ajuda de categoria
-                this.categoryHelpEmbed(args, message)
-            },
-            command: () => { // Mensagem de ajuda de comando
-                this.commandHelpEmbed(args, message)
-            },
-            error: () => { // Não foi possível encontrar o que foi solicitado
-                message.reply(`Esse comando não existe. Digite ${client.prefix} help para ver todos os comandos!`)
-            }
+            default: () => this.getDefaultHelpEmbed(client, message),   // Mensagem de ajuda Padrão
+            category: () => this.getCategoriesHelpEmbed(args, message), // Mensagem de ajuda de Categoria
+            command: () => this.getCommandHelpEmbed(args, message),     // Mensagem de ajuda de Comando
+            error: () =>  // Não foi possível encontrar o que foi solicitado
+                `Esse comando não existe. Digite ${client.prefix} help para ver todos os comandos!`
         }
 
-        helpEmbeds[typeOfHelp]() // Envia a mensagem de ajuda
+        const helpEmbed = helpEmbeds[typeOfHelp]() // Envia a mensagem de ajuda
+
+        this.sendHelpEmbed(helpEmbed, message, updateMessage)
     }
 
-    sendHelpEmbed(embeds, components, channel, messageToEdit) {
-        // Edição de categoria
-        if (messageToEdit)
-            return messageToEdit.edit({ embeds, components })
+    sendHelpEmbed(helpEmbed, message, updateMessage) {
+        // Atualiza um embed já existente
+        if (updateMessage)
+            return message.edit(helpEmbed)
 
-        channel.send({ embeds, components })
+        message.channel.send(helpEmbed)
     }
 
     getPainelOfCategories() {
@@ -104,14 +99,14 @@ class Help extends Command {
         return actionPainel
     }
 
-    defaultHelpEmbed(client, message) {
+    getDefaultHelpEmbed(client, message) {
         const categories = client.categories.map((category) => {
             const commands = this.getCommandsOfCategory(category)
             const categoryName = formatString(category)
 
             return {
                 name: `${categoryName} - ${commands.length} comandos: `,
-                value: commands.map(cmd => `\`${cmd.name}\``).join(', ')
+                value: commands.map(cmd => inlineCode(cmd.name)).join(', ')
             }
         })
 
@@ -138,13 +133,14 @@ class Help extends Command {
             .setTitle('☄ | Gabs está aqui!')
             .setThumbnail('https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/b7521c59-9c6d-4e12-8627-6411b1388bfb/dajq0p5-3bec1efa-7437-4bf5-90b9-0463aa4b8363.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2I3NTIxYzU5LTljNmQtNGUxMi04NjI3LTY0MTFiMTM4OGJmYlwvZGFqcTBwNS0zYmVjMWVmYS03NDM3LTRiZjUtOTBiOS0wNDYzYWE0YjgzNjMuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.sORmjwvRdk0jZ5belg-eayi9BzNmjamQtF5RUZE9tPA')
 
-        message.channel.send({ embeds: [helpEmbed, imageEmbed], components: [this.getPainelOfCategories()] })
+
+        return { embeds: [helpEmbed, imageEmbed], components: [this.getPainelOfCategories()] }
     }
 
-    HelpEmbedOfCategories(client, typeOfHelp, message) {
-        const categoryName = formatString(typeOfHelp)
+    getCategoriesHelpEmbed(categoria, message) {
+        const categoryName = formatString(categoria)
 
-        let commands = this.client.commands.filter(cmd => cmd.category.toLowerCase() === typeOfHelp.toLowerCase())
+        let commands = this.client.commands.filter(cmd => cmd.category.toLowerCase() === categoria.toLowerCase())
 
         commands = JSON.parse(JSON.stringify(commands)).map(cmd => {
             let cmdName = this.client.prefix + ' ' + cmd.name
@@ -159,25 +155,27 @@ class Help extends Command {
         })
 
         const helpEmbed = new EmbedBuilder()
-            .setAuthor({ name: `${client.tag} Bot 🍮`, iconURL: client.user.avatarURL() })
+            .setAuthor({ name: `${this.client.tag} Bot 🍮`, iconURL: this.client.user.avatarURL() })
             .setTitle(`:file_folder: | ${categoryName}`)
-            .setDescription(`**Digite ${client.prefix} (nome do comando)** para saber mais sobre um comando!`)
+            .setDescription(`**Digite ${this.client.prefix} (nome do comando)** para saber mais sobre um comando!`)
             .addFields(commands)
             .setColor(this.client.colors['default'])
             .setFooter(this.client.getFooter(message.guild))
             .setTimestamp()
 
-        message.channel.send({ embeds: [helpEmbed] })
+        return { embeds: [helpEmbed], components: [this.getPainelOfCategories()] }
     }
 
-    HelpEmbedOfCommand(client, command, message) {
+    getCommandHelpEmbed(command, message) {
+        command = this.client.commands.find(cmd => cmd.name === command || (cmd.aliases && cmd.aliases.includes(command)))
+
         let cmdName = formatString(command.name)
-        let cmdUsage = client.prefix + ' ' + command.name
-        if (Object.prototype.hasOwnProperty.call(command, 'args'))
+        let cmdUsage = this.client.prefix + ' ' + command.name
+        if (command.hasOwnProperty.call(command, 'args'))
             cmdUsage += ' ' + command.args
 
         const helpEmbed = new EmbedBuilder()
-            .setAuthor({ name: `${client.tag} Bot 🍮`, iconURL: client.user.avatarURL() })
+            .setAuthor({ name: `${this.client.tag} Bot 🍮`, iconURL: this.client.user.avatarURL() })
             .setTitle(`:space_invader: | ${cmdName}`)
             .setDescription(`Descrição: ${command.description}\n` +
                 `Apelidos: \`${command.aliases.join('` `')}\``)
@@ -188,11 +186,11 @@ class Help extends Command {
                     inline: true
                 }
             )
-            .setColor(client.colors['default'])
-            .setFooter(client.getFooter(message.guild))
+            .setColor(this.client.colors['default'])
+            .setFooter(this.client.getFooter(message.guild))
             .setTimestamp()
 
-        message.channel.send({ embeds: [helpEmbed] })
+        return { embeds: [helpEmbed], components: [this.getPainelOfCategories()] }
     }
 }
 
