@@ -65,7 +65,7 @@ Fique à vontade para enviar sugestões, dicas ou até mesmo reconstruir o códi
 [<img alt="Instagram Gabriel" src="https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white&link=instagram.com/gabrielsants_dev/" height="22" />][instagram-ga]
 [<img alt="Mail to Gabriel" src="https://img.shields.io/badge/-Gmail-c14438?style=flat&logo=Gmail&logoColor=white" height="22" title="gabriel04.ok@gmail.com" />][email-ga]
 [<img alt="Linkedin Gabriel" src="https://img.shields.io/badge/-LinkedIn-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/gabriel-santana-silva/" height="22" />][linkedin-ga]
-[<img alt="Discord Profile" src="https://img.shields.io/badge/Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white&link=dsc.bio/punidc" height="22" />][discord]
+[<img alt="Discord Profile" src="https://img.shields.io/badge/Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white&link=dsc.bio/punidc" height="22" />][discord-ga]
 
 ## 👨‍💻 Team
 
@@ -80,4 +80,5 @@ This project is licensed under the [MIT LICENSE][license].
 [linkedin-ga]: https://www.linkedin.com/in/gabriel-santana-silva/
 [email-ga]: mailto:gabriel04.ok@gmail.com
 [instagram-ga]: https://www.instagram.com/gabrielsants_dev/
+[discord-ga]: https://dsc.bio/punidc
 [license]: LICENSE
