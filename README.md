@@ -17,7 +17,7 @@
 
 ## 💻 Sobre
 
-O PuniBot é um bot de moderação e entretenimento cross-platform para Discord, com interface limpa e fácil de configurar e executar! Com ele, você pode reproduzir suas músicas favoritas sem precisar sair do Discord.
+O PuniBot é um bot de moderação e entretenimento cross-platform para Discord, com interface limpa, fácil de configurar e executar! Com ele, você pode moderar seu servidor e divertir com seus amigos a vontade em seu servidor Discord.
  
 Contando com diversos comandos legais, que facilitaram e atrairam pessoas pro seu server, além de APIs, Embed Costumizados, Gerador de GIFs e muito mais!
 
