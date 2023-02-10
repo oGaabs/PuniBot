@@ -1,6 +1,6 @@
 const Command = require('../../utils/base/Command.js')
 
-const { EmbedBuilder } = require('discord.js')
+const { ChannelType, EmbedBuilder, PermissionsBitField: { Flags: PERMISSIONS }, inlineCode } = require('discord.js')
 
 class Invite extends Command {
     constructor(client) {
@@ -13,38 +13,47 @@ class Invite extends Command {
     }
 
     async execute(message, _args, client) {
-        const user = message.member
+        const member = message.member
 
         const permissionErrorEmbed = await client.defaultEmbed.getPermissionError(
             '*Verifique se você ou o bot possui a permissão:*',
-            '`CREATE_INSTANT_INVITE`'
+            inlineCode(PERMISSIONS.CreateInstantInvite)
         )
 
         permissionErrorEmbed.setColor(client.colors['default'])
         permissionErrorEmbed.setFooter(client.getFooter(message.guild))
 
-        if (!user.permissions.has('CREATE_INSTANT_INVITE'))
+        if (!member.permissions.has(PERMISSIONS.CreateInstantInvite))
             return message.channel.send({ embeds: [permissionErrorEmbed] })
 
-        const guild = user.guild
-        if (!guild.available) return
-        const channels = guild.channels.cache
-        const inviteChannel = message.mentions.channels.first() ?? (channels.filter(channel => channel.isText()).first() || guild.systemChannel)
+        if (!member.guild.available) return
 
-        if (!channels.find(channel => channel === inviteChannel) ||
-            !inviteChannel.permissionsFor(user).has('CREATE_INSTANT_INVITE'))
+        const inviteChannel = this.getInviteChannel(message, member.guild)
+
+        const channelExistInGuild = member.guild.channels.cache.find(channel => channel === inviteChannel)
+        const canSendInviteToChannel = inviteChannel.permissionsFor(member).has(PERMISSIONS.CreateInstantInvite)
+
+        if (!channelExistInGuild || !canSendInviteToChannel)
             return message.channel.send({ embeds: [permissionErrorEmbed] })
 
         const invite = await inviteChannel.createInvite({ unique: true, reason: 'Requisitado pelo ' + message.author.tag })
+
         const inviteEmbed = new EmbedBuilder()
             .setThumbnail(client.user.displayAvatarURL({ dynamic: true, size: 1024 }))
             .setTitle(' **Puni Invite** ')
             .setColor(client.colors['default'])
-            .setDescription(`Quer me convidar para seu servidor? Entre por aqui ${invite}`)
-            .setFooter(client.getFooter(message.guild))
+            .setDescription(`Você está convidado para o servidor! Entre por aqui ${invite}`)
+            .setAuthor({ name: 'Made by ' + member.user.tag, iconURL: 'https://i.imgur.com/AfFp7pu.png', url: invite.toString() })
             .setTimestamp()
+
         message.reply({ embeds: [inviteEmbed] })
     }
+
+    getInviteChannel(message, guild) {
+        const guildChannels = guild.channels.cache
+        return message.mentions.channels.first() ?? (guildChannels.filter(channel => channel.type === ChannelType.GuildText).first() || guild.systemChannel)
+    }
+
 }
 
 module.exports = Invite
