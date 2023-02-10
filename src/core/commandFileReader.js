@@ -33,7 +33,7 @@ class CommandHandler {
                         return logger.debug('[DEBUG] ::', ` (${++index}/${commandFiles.length}) Loaded ${file} command.`)
                     }
                     catch (err) {
-                        console.log(err)
+                        console.error(err)
                         return logger.error('[FAIL] ::', `(${++index}) Fail when loading ${file} command.`, false, err)
                     }
                 }
@@ -100,7 +100,7 @@ class CommandHandler {
                     return logger.debug('[DEBUG] ::', ` (${++index}/${commandFiles.length}) Loaded ${file} SlashCommand.`)
                 }
                 catch (err) {
-                    console.log(err)
+                    console.error(err)
                     return logger.error('[FAIL] ::', `(${++index}) Fail when loading ${file} command.`, false, err)
                 }
             }
