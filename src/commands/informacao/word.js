@@ -2,7 +2,7 @@ const Command = require('../../utils/base/Command.js')
 
 const { EmbedBuilder } = require('discord.js')
 
-let axios = require('axios')
+let axiosDicioAPI = require('../../api/diciio-api.js')
 
 class Word extends Command {
     constructor(client) {
@@ -15,10 +15,26 @@ class Word extends Command {
             args: '(palavra)'
         })
 
-        axios = axios.create({
-            baseURL: 'https://dicio-api-ten.vercel.app/v2/',
-            timeout: 10000
+        this.axiosAPI = axiosDicioAPI
+    }
+
+    async execute(message, args, client) {
+        const searchTerm = args[0] || 'pudim'
+        const msg = await message.reply('**Procurando significado...**')
+
+        const response = await this.axiosAPI(searchTerm).catch((res) => {
+            this.errorHandler(res, message, searchTerm)
         })
+        if (!response) return
+
+        msg.delete()
+
+        if (response.data.length === 0) return msg.channel.send(`Palavra não encontrada.\nUtilize ${client.prefix} word livro`)
+
+        for (const wordInfo of response.data) {
+            const meaningEmbed = this.createMeaningEmbed(wordInfo, searchTerm)
+            message.channel.send({ embeds: [meaningEmbed] })
+        }
     }
 
     errorHandler(axiosError, message, searchTerm) {
@@ -27,7 +43,7 @@ class Word extends Command {
         let errorMessage = ''
         switch (status) {
             case 400:
-                errorMessage = `Palavra ${searchTerm} inválida. Tente usar palavras em português`
+                errorMessage = `Palavra ${searchTerm} não encontrada. Tente usar palavras no singular, substantivos masculinos e em português`
                 break
             case 404:
                 errorMessage = `Palavra ${searchTerm} não encontrada .\nUtilize ${this.client.prefix} word livro`
@@ -46,25 +62,6 @@ class Word extends Command {
             .setDescription(`📕 Status: ${statusText}`)
 
         message.channel.send({ embeds: [errorEmbed] })
-    }
-
-    async execute(message, args, client) {
-        const searchTerm = args[0] || 'pudim'
-        const msg = await message.reply('**Procurando significado...**')
-
-        const response = await axios(searchTerm).catch((res) => {
-            this.errorHandler(res, message, searchTerm)
-        })
-        if (!response) return
-
-        msg.delete()
-
-        if (response.data.length === 0) return msg.channel.send(`Palavra não encontrada.\nUtilize ${client.prefix} word livro`)
-
-        for (const wordInfo of response.data) {
-            const meaningEmbed = this.createMeaningEmbed(wordInfo, searchTerm)
-            message.channel.send({ embeds: [meaningEmbed] })
-        }
     }
 
     createMeaningEmbed(wordSearch, searchedTerm) {
@@ -93,7 +90,7 @@ class Word extends Command {
 
     replaceEmptyInfo(wordInfo) {
         Object.keys(wordInfo).forEach(info => {
-            if (wordInfo[info] === '') 
+            if (wordInfo[info] === '')
                 wordInfo[info] = 'Não fornecido'
         })
 
