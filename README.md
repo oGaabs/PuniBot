@@ -4,7 +4,7 @@
 </h2>
 
 <p align="center">
-  <h1 align="center">PuniBot | NodeJS & Discord.js :rocket:</h1>
+  <h1 align="center">PuniBot + GPT3 | NodeJS & Discord.js :rocket:</h1>
 </p>
 
 <p align="center">
@@ -17,7 +17,7 @@
 
 ## 💻 Sobre
 
-O PuniBot é um bot de moderação e entretenimento cross-platform para Discord, com interface limpa, fácil de configurar e executar! Com ele, você pode moderar seu servidor e divertir com seus amigos a vontade em seu servidor Discord.
+O PuniBot é um bot de moderação e entretenimento cross-platform para Discord, com interface limpa, fácil de configurar e executar! Com ele, você pode moderar seu servidor, tirar duvidas e se divertir com seus amigos a vontade em seu servidor Discord.
  
 Contando com diversos comandos legais, que facilitaram e atrairam pessoas pro seu server, além de APIs, Embed Costumizados, Gerador de GIFs e muito mais!
 
@@ -25,6 +25,7 @@ ___
 
 ## 🎧 Features:
 
+* ChatGPT3 Integration
 * Simple and Structured Interface
 * Implementing Clean Code and Software Architeture
 * Highly and Shallow Design in Debug
