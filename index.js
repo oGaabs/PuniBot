@@ -3,7 +3,7 @@ require('dotenv').config()
 const { GatewayIntentBits, Events } = require('discord.js')
 const { version } = require('./package.json')
 
-const startHost = require('./src/config/server')
+const startHost = require('./src/core/config/server')
 const PuniBot = require('./src/PuniBot')
 
 
