@@ -2,7 +2,7 @@ const Command = require('../../utils/base/Command.js')
 
 const { EmbedBuilder } = require('discord.js')
 
-let axiosDicioAPI = require('../../api/diciio-api.js')
+let axiosDicioAPI = require('../../api/dicio-api.js')
 
 class Word extends Command {
     constructor(client) {

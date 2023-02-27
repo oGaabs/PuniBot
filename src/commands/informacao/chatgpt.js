@@ -4,7 +4,7 @@ const { EmbedBuilder, codeBlock } = require('discord.js')
 const moment = require('moment')
 moment.locale('pt-br')
 
-const axiosChatGPT = require('../../api/chatgpt.js').default
+const axiosChatGPT = require('../../api/chatgpt.js')
 
 class ChatGPT extends Command {
     constructor(client) {
