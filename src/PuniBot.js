@@ -16,7 +16,8 @@ class PuniBot extends Client {
             this.categories = new Collection()
 
             this.commandHandler = configurations.commandHandler || new CommandHandler({ commands: this.commands, slashCommands: this.slashCommands, categories: this.categories })
-
+            this.database = configurations.database
+        
             Object.assign(this, utils)
 
             PuniBot.instance = this
@@ -30,6 +31,11 @@ class PuniBot extends Client {
             PuniBot.instance = new PuniBot()
 
         return PuniBot.instance
+    }
+
+    async start(token) {
+        await this.database.connect()
+        this.loginBot(token)
     }
 
     // Funções de Login
