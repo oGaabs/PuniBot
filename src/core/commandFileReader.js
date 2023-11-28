@@ -34,7 +34,7 @@ class CommandHandler {
                     }
                     catch (err) {
                         console.error(err)
-                        return logger.error('[FAIL] ::', `(${++index}) Fail when loading ${file} command.`, false, err)
+                        return logger.error('[FAIL] ::', `(${++index}) Fail when loading ${file} command. ${err}`, false)
                     }
                 }
 
@@ -67,7 +67,7 @@ class CommandHandler {
                         return logger.debug('[DEBUG] ::', ` (${++index}/${commandFiles.length}) Loaded ${file} event.`)
                     }
                     catch (err) {
-                        return logger.error('[FAIL] ::', `(${++index}) Fail when loading ${file} event.`, false, err)
+                        return logger.error('[FAIL] ::', `(${++index}) Fail when loading ${file} event. ${err}`, false)
                     }
                 }
 
