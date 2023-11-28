@@ -1,23 +1,23 @@
 require('dotenv').config()
 
 const { GatewayIntentBits, Events } = require('discord.js')
+const DatabaseService  = require('./src/core/database/DatabaseService')
 const { version } = require('./package.json')
 
 const startHost = require('./src/core/config/server')
 const PuniBot = require('./src/PuniBot')
 
-
+const database = new DatabaseService(process.env.MONGODB_URI)
 const client = new PuniBot({
     intents: [
         GatewayIntentBits.DirectMessages,
         GatewayIntentBits.Guilds,
-        GatewayIntentBits.GuildBans,
         GatewayIntentBits.GuildMessages,
         GatewayIntentBits.GuildPresences,
         GatewayIntentBits.GuildMembers,
         GatewayIntentBits.MessageContent
     ]
-})
+}, { database })
 
 
 client.once(Events.ClientReady, async () => {
@@ -63,5 +63,5 @@ client.once(Events.ClientReady, async () => {
 })
 
 // Loga na Discord API com o token do seu bot
-client.loginBot(process.env.CLIENT_TOKEN)
+client.start(process.env.CLIENT_TOKEN)
 startHost()
